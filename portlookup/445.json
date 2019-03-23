@@ -1,0 +1,10 @@
+{
+	"URLs": [
+		"https://www.rapid7.com/db/modules/exploit/windows/smb/ms17_010_eternalblue",
+		"https://www.exploit-db.com/exploits/7104"
+	],
+	"Notes": [
+		"List shares - smbclient -U\"\" -N -L //targetip",
+		"Connect to share with auth - smbclient -U \"username\"%\"password\" //targetip/share"
+	]
+}

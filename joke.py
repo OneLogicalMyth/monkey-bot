@@ -26,7 +26,7 @@ class joke(object):
 			res = requests.get("http://icanhazdadjoke.com", headers={"Accept":"application/json"})
 			data = res.json()
 			if data:
-			        response = data["joke"]
+				response = data["joke"]
 
 		if command == 'chuck norris':
 			res = requests.get("https://api.icndb.com/jokes/random", headers={"Accept":"application/json"})
@@ -34,23 +34,23 @@ class joke(object):
 			if data:
 				response = data["value"]["joke"].replace('&quot;','"')
 
-                if command == 'trump':
-                        res = requests.get("https://api.tronalddump.io/random/quote", headers={"Accept":"application/hal+json"})
-                        data = res.json()
-                        if data:
-				attachment = True
-				response = [
-						{
-							"fallback": data['value'],
-							"color": "#0062B9",
-							"pretext": data['value'],
-							"author_name": "Donald Trump",
-							"title": data['_embedded']['source'][0]['url'],
-							"title_link": data['_embedded']['source'][0]['url'],
-							"footer": "via Twitter",
-							"footer_icon": "https://1000logos.net/wp-content/uploads/2017/06/twitter-icon-2.png",
-							"ts": time.mktime(time.strptime(data['appeared_at'], '%Y-%m-%dT%H:%M:%S'))
-						}
-					]
+		if command == 'trump':
+				res = requests.get("https://api.tronalddump.io/random/quote", headers={"Accept":"application/hal+json"})
+				data = res.json()
+				if data:
+					attachment = True
+					response = [
+							{
+								"fallback": data['value'],
+								"color": "#0062B9",
+								"pretext": data['value'],
+								"author_name": "Donald Trump",
+								"title": data['_embedded']['source'][0]['url'],
+								"title_link": data['_embedded']['source'][0]['url'],
+								"footer": "via Twitter",
+								"footer_icon": "https://1000logos.net/wp-content/uploads/2017/06/twitter-icon-2.png",
+								"ts": time.mktime(time.strptime(data['appeared_at'], '%Y-%m-%dT%H:%M:%S'))
+							}
+						]
 
 		return response, attachment
