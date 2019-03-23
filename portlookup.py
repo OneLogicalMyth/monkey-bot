@@ -1,4 +1,4 @@
-import csv
+import csv, os, json
 
 class portlookup(object):
 
@@ -22,6 +22,15 @@ class portlookup(object):
 					PortDetail = [d for d in self.port_list if d['title'].startswith(PortNo)]
 					attachment = True
 					if PortDetail:
+						port_file = '/opt/monkey-bot/portlookup/' + str(PortNo)[:-1] + '.json'
+						file_exists = os.path.isfile(port_file)
+						if file_exists:
+							with open(port_file, 'r') as port_file_json:
+								port_info = json.load(port_file_json)
+								if "Notes" in port_info:
+									PortDetail.append({"short": False, "title": "Notes", "value": "{}".format('\n'.join(port_info["Notes"]))})
+                                                                if "URLs" in port_info:
+                                                                        PortDetail.append({"short": False, "title": "URLs", "value": "{}".format('\n'.join(port_info["URLs"]))})
 						message = [{"fallback": "blah", "pretext": "The following port details were found:", "fields": PortDetail}]
 					else:
 						message = [{"fallback": "blah", "pretext": "No port details found, was it a private port?\n\n System Ports (0-1023)\nUser Ports (1024-49151)\nDynamic and/or Private Ports (49152-65535)\n\n<https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml|Manually lookup on iana>"}]
