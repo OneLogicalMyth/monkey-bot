@@ -29,8 +29,8 @@ class portlookup(object):
 								port_info = json.load(port_file_json)
 								if "Notes" in port_info:
 									PortDetail.append({"short": False, "title": "Notes", "value": "{}".format('\n'.join(port_info["Notes"]))})
-                                                                if "URLs" in port_info:
-                                                                        PortDetail.append({"short": False, "title": "URLs", "value": "{}".format('\n'.join(port_info["URLs"]))})
+								if "URLs" in port_info:
+									PortDetail.append({"short": False, "title": "URLs", "value": "{}".format('\n'.join(port_info["URLs"]))})
 						message = [{"fallback": "blah", "pretext": "The following port details were found:", "fields": PortDetail}]
 					else:
 						message = [{"fallback": "blah", "pretext": "No port details found, was it a private port?\n\n System Ports (0-1023)\nUser Ports (1024-49151)\nDynamic and/or Private Ports (49152-65535)\n\n<https://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml|Manually lookup on iana>"}]
