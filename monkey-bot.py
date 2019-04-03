@@ -1,7 +1,10 @@
-import time, re, json
+import time, re, json, sys, os
 from slackclient import SlackClient
-from joke import joke
-from portlookup import portlookup
+from plugins import *
+
+# get root directory
+file = sys.argv[0]
+rootpath = os.path.dirname(file)
 
 # load config file
 with open('/etc/monkey-bot.conf', 'r') as f:
@@ -47,25 +50,31 @@ def parse_direct_mention(message_text):
 def handle_command(command, channel, user):
 	"""
 		Executes bot command if the command is known
-	"""	# Default response is help text for the user
-	default_response = "Sorry don't understand that. Commands are as follows:\n`unlocked` - record the machine as unlocked\n`stats` - current unlock count per user"
+	"""
 	response = None
 
+	# grabs calling user info
 	user_info = slack_client.api_call(
 	   "users.info",
 	   user=user
 	)
-
 	user_display_name = user_info["user"]["profile"]["display_name"]
 
 	# debug
 	print "The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command)
 
-	# process commands, currently only joke will work
-	response, attachment_response = joke().begin(command,user)
+	# begin processing commands
+	response, attachment_response = joke.joke().begin(command,user)
 
 	if command.startswith('port'):
-		response, attachment_response = portlookup().start(command)
+		response, attachment_response = portlookup.portlookup().start(command,rootpath)
+
+	# ensure the help command is always last
+	if command.startswith('help') or response == None:
+		attachment_response = True
+		response = bothelp.help().get_help(command)
+
+	# end processing commands
 
 	# Sends the response back to the channel
 	if attachment_response:

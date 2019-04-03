@@ -2,12 +2,12 @@ import csv, os, json
 
 class portlookup(object):
 
-	def start(self,command):
+	def start(self,command,rootpath):
 		message = 'Sorry I do not understand what port number you are requesting.'
 		attachment = False
 
 		self.port_list = []
-		with open('/opt/monkey-bot/portlookup/service-names-port-numbers.csv', mode='r') as infile:
+		with open(rootpath + '/resources/portlookup/service-names-port-numbers.csv', mode='r') as infile:
 			reader = csv.reader(infile)
 			for row in reader:
 				row_out = {"short": True, "title": "{}/{}".format(row[1],row[2]).upper(), "value": "{} - {}".format(row[0],row[3])}
@@ -22,7 +22,7 @@ class portlookup(object):
 					PortDetail = [d for d in self.port_list if d['title'].startswith(PortNo)]
 					attachment = True
 					if PortDetail:
-						port_file = '/opt/monkey-bot/portlookup/' + str(PortNo)[:-1] + '.json'
+						port_file = rootpath + '/resources/portlookup/' + str(PortNo)[:-1] + '.json'
 						file_exists = os.path.isfile(port_file)
 						if file_exists:
 							with open(port_file, 'r') as port_file_json:
