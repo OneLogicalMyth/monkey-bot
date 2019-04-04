@@ -1,11 +1,9 @@
-from vendor import fitbit
-from vendor import gather_keys_oauth2 as Oauth2
-from vendor.fitbit.iniHandler import ReadCredentials,ReadTokens,WriteTokens, SaveTokens
-from vendor.googlefit import g_fit
+from vendor.fitbit import fitbit
+from vendor.fitbit import gather_keys_oauth2 as Oauth2
 import datetime
 
 # Built by https://github.com/itchannel
-class fitbitapi(object,CLIENT_ID,CLIENT_SECRET):
+class fitbitapi(object):
 
 	def begin(self,command):
 
@@ -20,7 +18,10 @@ class fitbitapi(object,CLIENT_ID,CLIENT_SECRET):
 
 	def getleaderboard(self):
 
-		self.client_id, self.client_secret = ReadCredentials()
+		print config.FitBit.CLIENT_ID
+		#self.client_id = config.FitBit.CLIENT_ID
+		#print self.client_id
+		#, self.client_secret = ReadCredentials()
 		self.ACCESS_TOKEN, self.REFRESH_TOKEN = ReadTokens()
 		auth2_client = fitbit.Fitbit(self.CLIENT_ID,self.CLIENT_SECRET, oauth2=True, access_token=self.ACCESS_TOKEN, refresh_token=self.REFRESH_TOKEN,refresh_cb=SaveTokens)
 
@@ -30,7 +31,7 @@ class fitbitapi(object,CLIENT_ID,CLIENT_SECRET):
 		#print friends
 		leaderboardlist = ""
 		count = 0
-		googlefitapi = g_fit.googlefit().get_stats()
+		#googlefitapi = g_fit.googlefit().get_stats()
 		results = []
 
 		for friend in friends["friends"]:
