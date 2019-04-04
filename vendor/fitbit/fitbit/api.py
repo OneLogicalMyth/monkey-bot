@@ -920,6 +920,17 @@ class Fitbit(object):
         url = "{0}/{1}/user/{2}/friends.json".format(*self._get_common_args(user_id))
         return self.make_request(url)
 
+    def get_friends_leaderboardnew(self, period):
+        """
+        https://dev.fitbit.com/docs/friends/#get-friends-leaderboard
+        """
+        if not period in ['7d', '30d']:
+            raise ValueError("Period must be one of '7d', '30d'")
+        url = "{0}/1.1/user/-/leaderboard/friends.json".format(
+            *self._get_common_args() )
+        return self.make_request(url)
+
+
     def get_friends_leaderboard(self, period):
         """
         https://dev.fitbit.com/docs/friends/#get-friends-leaderboard

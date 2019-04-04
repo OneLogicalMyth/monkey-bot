@@ -70,7 +70,7 @@ def handle_command(command, channel, user):
 		response, attachment_response = portlookup.portlookup().start(command,rootpath)
 
 	if command.startswith('fitness'):
-		obj_fitbit = fitbit.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"])
+		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"])
 		response = obj_fitbit.begin(command)
 
 	# ensure the help command is always last
