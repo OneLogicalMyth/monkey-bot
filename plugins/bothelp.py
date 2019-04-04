@@ -9,6 +9,9 @@ class help(object):
 		if command.startswith('help fitness'):
 			attachments.append(self.fitness())
 
+		if command.startswith('help port'):
+			attachments.append(self.port())
+
 		if command.startswith('help all'):
 			attachments.append(self.fitness())
 
@@ -20,7 +23,7 @@ class help(object):
 			"fields": [
 				{
 				"title": "Help Topics",
-				"value": "fitness\n\nYou can also do `help all`.",
+				"value": "fitness\nport\n\nYou can also do `help all`.",
 				"short": True
 				}			
 			]
@@ -28,6 +31,20 @@ class help(object):
 
 		return attachments
 
+	def port(self):
+
+		return {
+				"fallback": "You can try 'port 123'",
+				"title": "Port Commands",
+				"text": "The following commands can be used.",
+				"fields": [
+					{
+					"title": "Port Number Lookup",
+					"value": "port ###\n\nWhere ### equals the port number.",
+					"short": True
+					}
+				]
+				}
 
 	def fitness(self):
 
