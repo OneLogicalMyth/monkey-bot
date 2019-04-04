@@ -1,0 +1,10 @@
+{
+	"URLs": [
+		"https://www.greycampus.com/opencampus/ethical-hacking/snmp-enumeration",
+		"https://tools.kali.org/information-gathering/snmp-check"
+	],
+	"Notes": [
+		"Quick info dump - `snmp-check target-ip -c public`",
+		"Brute force community - `onesixtyone -c dict.txt target-ip`"
+	]
+}
