@@ -73,6 +73,8 @@ def handle_command(command, channel, user):
 		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"])
 		response = obj_fitbit.begin(command)
 
+	if command.startswith('rtfm'):
+		response, attachment_response = rtfm.rtfm().lookup(command)
 	# ensure the help command is always last
 	if command.startswith('help') or response == None:
 		attachment_response = True
