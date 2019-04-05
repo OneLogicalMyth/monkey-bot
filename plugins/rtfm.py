@@ -2,16 +2,16 @@ import sqlite3
 class rtfm(object):
 
 	
-        def lookup(self,command):
+        def lookup(self,command,rootPath):
                 message = 'Sorry I do not understand what your trying to search.'
                 attachment = False
-
+		rootPath = "/opt/monkey-bot"
 
                 if command.startswith('rtfm'):
 			sqlcmd = []
 			sqltpl = []
 			sqllst = []
-			conn = sqlite3.connect('resources/rtfm/snips.db')
+			conn = sqlite3.connect(rootPath + '/resources/rtfm/snips.db')
 			if not ' ' in command:
 				return "You need to include a search term such as RDP", attachment
 			search = "{}".format(command.split(' ')[1])

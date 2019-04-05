@@ -74,7 +74,7 @@ def handle_command(command, channel, user):
 		response = obj_fitbit.begin(command)
 
 	if command.startswith('rtfm'):
-		response, attachment_response = rtfm.rtfm().lookup(command)
+		response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
 	# ensure the help command is always last
 	if command.startswith('help') or response == None:
 		attachment_response = True
