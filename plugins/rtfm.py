@@ -45,10 +45,10 @@ class rtfm(object):
 		findings = []
 		for cmd in rows:
 			findings.append({"short": False, "title": "Description", "value": "{}".format(cmd[2])})
-			findings.append({"short": False, "title": "Port", "value": "{}".format(str(cmd[0]))})
 			findings.append({"short": False, "title": "Command", "value": "{}".format(cmd[1])})
 			findings.append({"short": False, "title": "Tags", "value": "{}".format(cmd[5])})
+			findings.append({"short": False, "title": "References", "value": "{}".format(cmd[6])})
 			findings.append({"short": False, "title": "--------------------------------------", "value": ""})
-
+			
 		message2 = [{"fallback": "blah", "pretext": "The following RTFM entries were found:", "fields": findings}]
 		return message2
