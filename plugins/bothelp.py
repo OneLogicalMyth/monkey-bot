@@ -9,6 +9,9 @@ class help(object):
 		if command.startswith('help fitness'):
 			attachments.append(self.fitness())
 
+		if command.startswith('help rtfm'):
+			attachments.append(self.rtfm())
+
 		if command.startswith('help port'):
 			attachments.append(self.port())
 
@@ -23,7 +26,7 @@ class help(object):
 			"fields": [
 				{
 				"title": "Help Topics",
-				"value": "fitness\nport\n\nYou can also do `help all`.",
+				"value": "fitness\nport\nrtfm\n\nYou can also do `help all`.",
 				"short": True
 				}			
 			]
@@ -60,3 +63,18 @@ class help(object):
 					}
 				]
 				}
+	def rtfm(self):
+
+		 return {
+                                "fallback": "You can try 'rtfm rdp'",
+                                "title": "rtfm Commands",
+                                "text": "The following commands can be used.",
+                                "fields": [
+                                        {
+                                        "title": "RTFM Lookup",
+                                        "value": "rtfm value",
+                                        "short": True
+                                        }
+                                ]
+                                }
+
