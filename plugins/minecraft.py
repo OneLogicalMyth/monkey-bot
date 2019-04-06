@@ -8,14 +8,17 @@ class minecraft(object):
 
                 if command.startswith('minecraft'):
 
-			url = "https://mcapi.us/server/status?ip=monkey-bot.pentestmonkeys.tech"
+			url = "https://api.mcsrvstat.us/2/5.196.123.114"
 			response = urllib.urlopen(url)
 			data = json.loads(response.read())
 			outputs = []
-                        outputs.append({"short": False, "title": "MOTD", "value": "{}".format(data["motd"])})
+                        outputs.append({"short": False, "title": "MOTD", "value": "{}".format(data["motd"]["clean"][0])})
                         outputs.append({"short": False, "title": "Online", "value": "{}".format(data["online"])})
 			outputs.append({"short": False, "title": "Server", "value": "monkey-bot.dcrs.tech"})
-                        outputs.append({"short": False, "title": "Current Players", "value": "{}".format(data["players"]["now"])})
+			players = ""
+			for player in data["players"]["list"]:
+				players += "{}\n".format(player)
+                        outputs.append({"short": False, "title": "Current Players", "value": "{}".format(players)})
 
                 	message = [{"fallback": "blah", "pretext": "Current Pentest Monkey Server", "fields": outputs}]
 			attachment = True
