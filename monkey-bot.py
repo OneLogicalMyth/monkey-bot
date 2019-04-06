@@ -72,7 +72,9 @@ def handle_command(command, channel, user):
 	if command.startswith('fitness'):
 		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"])
 		response = obj_fitbit.begin(command)
-
+	if command.startswith('minecraft'):
+		response, attachment_response = minecraft.minecraft().lookup(command)
+	#RTFM quick guide
 	if command.startswith('rtfm'):
 		response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
 	# ensure the help command is always last
