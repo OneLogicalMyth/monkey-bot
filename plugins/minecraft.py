@@ -14,7 +14,7 @@ class minecraft(object):
 			outputs = []
                         outputs.append({"short": False, "title": "MOTD", "value": "{}".format(data["motd"]["clean"][0])})
                         outputs.append({"short": False, "title": "Online", "value": "{}".format(data["online"])})
-			outputs.append({"short": False, "title": "Server", "value": "monkey-bot.dcrs.tech:25565"})
+			outputs.append({"short": False, "title": "Server", "value": "monkey-bot.pentestmonkeys.tech:25565"})
 			players = ""
 			if "list" in data["players"]:
 				for player in data["players"]["list"]:
