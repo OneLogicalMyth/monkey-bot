@@ -14,13 +14,15 @@ class minecraft(object):
 			outputs = []
                         outputs.append({"short": False, "title": "MOTD", "value": "{}".format(data["motd"]["clean"][0])})
                         outputs.append({"short": False, "title": "Online", "value": "{}".format(data["online"])})
-			outputs.append({"short": False, "title": "Server", "value": "monkey-bot.dcrs.tech"})
+			outputs.append({"short": False, "title": "Server", "value": "monkey-bot.dcrs.tech:25565"})
 			players = ""
-			for player in data["players"]["list"]:
-				players += "{}\n".format(player)
-                        outputs.append({"short": False, "title": "Current Players", "value": "{}".format(players)})
-
-                	message = [{"fallback": "blah", "pretext": "Current Pentest Monkey Server", "fields": outputs}]
+			if "list" in data["players"]:
+				for player in data["players"]["list"]:
+					players += "{}\n".format(player)
+                        	outputs.append({"short": False, "title": "Current Players", "value": "{}".format(players)})
+			else:
+				outputs.append({"short": False, "title": "Current Players", "value": "No Players Connected"})
+                	message = [{"fallback": "Minecraft Update", "pretext": "Current Pentest Monkey Server", "fields": outputs}]
 			attachment = True
 
 
