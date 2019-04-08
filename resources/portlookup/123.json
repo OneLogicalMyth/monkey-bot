@@ -4,11 +4,11 @@
 		"https://github.com/portcullislabs/udp-proto-scanner"
 	],
 	"Notes": [
-		"Identify remote NTP server - udp-proto-scanner.pl -p ntp targetIP",
-		"                           - udp-proto-scanner.pl -p NTPRequest targetIP",
+		"Identify remote NTP server - `udp-proto-scanner.pl -p ntp targetIP`",
+		"                           - `udp-proto-scanner.pl -p NTPRequest targetIP`",
 		"Connect to NTP server - ntpq targetIP",
 		"Once connected the following commands are a good starting point to obtain useful information:",
 		"readvar, showvars, peers, monlist", 
-		"Alternatively, connect to the remote NTP server and execute a command in one hit - ntpq -c \<command\> targetIP"
+		"Alternatively, connect to the remote NTP server and execute a command in one hit - `ntpq -c <command> targetIP`"
 	]
 }
