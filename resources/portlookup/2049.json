@@ -1,0 +1,17 @@
+{
+	"URLs": [
+		"https://www.phillips321.co.uk/2015/09/15/nfsshell-on-kali-linux-2-0/"
+	],
+	"Notes": [
+		"List NFS exports on a remote host - `showmount -e targetIP`",
+		"List currently mounted exports - `showmount -a targetIP`",
+		"Mount a remote NFS export - `mount targetIP:\/exportName \/local\/mountpoint\/`",
+		" Note: sometimes the `-o nfsvers=2` flag is needed to mount the remote export",
+		"NFSshell is also a good tool to have available, especially if you have to switch UID in order to access remote content. Example:",
+		"  `nfsshell`",
+		"  `host targetIP`",
+		"  `export` (to list available exports)",
+		"  `mount \/exportName`",
+		"  `ls -l`"
+	]
+}
