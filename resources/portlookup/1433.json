@@ -8,14 +8,14 @@
 	"Notes": [
 		"Example commands to connect to MSSQL DB server:",
 		"  `sqsh -U <username> -S <targetIP>`",
-		"  `sqlmap.py --banner -d mssql:\/\/username:password\@targetIP:1433\/master -v 5`",
+		"  `sqlmap.py --banner -d mssql:\/\/username:password@targetIP:1433\/master -v 5`",
 		"  metasploit: `exploit/windows/mssql/mssql_payload`",
 		"Example of executing a system commands using xp_cmdshell",
-		"  `EXEC xp_cmdshell 'net user'\;`",
+		"  `EXEC xp_cmdshell 'net user';`",
 		"  Note: If xp_cmdshell is disabled, enable it like so:",
 		"  `EXEC sp_configure 'show advanced options', 1;`",
 		"  `RECONFIGURE;`"
-		"  `EXEC sp_configure 'xp_cmdshell', 1\;",
-		"  `RECONFIGURE\;'"
+		"  `EXEC sp_configure 'xp_cmdshell', 1;",
+		"  `RECONFIGURE;'"
 	]
 }
