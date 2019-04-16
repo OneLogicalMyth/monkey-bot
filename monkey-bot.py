@@ -73,7 +73,7 @@ def handle_command(command, channel, user):
 		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"])
 		response = obj_fitbit.begin(command)
 	if command.startswith('minecraft'):
-		response, attachment_response = minecraft.minecraft().lookup(command)
+		response, attachment_response = minecraft.minecraft().lookup(command,config["MineCraft"])
 	#RTFM quick guide
 	if command.startswith('rtfm'):
 		response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
