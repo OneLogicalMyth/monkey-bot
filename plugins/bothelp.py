@@ -21,6 +21,8 @@ class help(object):
 		if command.startswith('help all'):
 			attachments.append(self.fitness())
 
+		if command.startswith('help movies'):
+			attachments.append(self.movies())
 		if command == 'help' or len(attachments) == 0:
 			attachments.append({
 			"fallback": "help all",
@@ -29,7 +31,7 @@ class help(object):
 			"fields": [
 				{
 				"title": "Help Topics",
-				"value": "fitness\nport\nrtfm\nminecraft\n\nYou can also do `help all`.",
+				"value": "fitness\nport\nrtfm\nminecraft\nmovies\n\nYou can also do `help all`.",
 				"short": True
 				}			
 			]
@@ -95,4 +97,25 @@ class help(object):
                                         }
                                 ]
                                 }
+
+	def movies(self):
+
+                 return {
+                                "fallback": "You can try 'movies'",
+                                "title": "Movies Commands",
+                                "text": "The following commands can be used.",
+                                "fields": [
+                                        {
+                                        "title": "Movie Lookup",
+                                        "value": "movies search searchstr",
+                                        "short": True
+                                        },
+					{
+                                        "title": "Movie Download",
+                                        "value": "movies download id",
+                                        "short": True
+                                        },
+                                ]
+                                }
+
 

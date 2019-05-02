@@ -1,4 +1,5 @@
 import time, re, json, sys, os
+import traceback
 from slackclient import SlackClient
 from plugins import *
 
@@ -77,10 +78,17 @@ def handle_command(command, channel, user):
 	#RTFM quick guide
 	if command.startswith('rtfm'):
 		response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
+
+	#CouchPotato Functionality
+	if command.startswith('movie'):
+		couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
+		response = couchPot.begin(command,user)
+
 	# ensure the help command is always last
 	if command.startswith('help') or response == None:
 		attachment_response = True
 		response = bothelp.help().get_help(command)
+
 
 	# end processing commands
 
@@ -116,6 +124,7 @@ if __name__ == "__main__":
 					command = command.lower()
 					handle_command(command, channel, user)
 			except Exception as e:
+				print traceback.format_exc()
 				print "ERROR: The command '" + str(command) + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'"
 			time.sleep(RTM_READ_DELAY)
 	else:
