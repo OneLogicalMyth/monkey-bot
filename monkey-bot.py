@@ -62,7 +62,7 @@ def handle_command(command, channel, user):
 	user_display_name = user_info["user"]["profile"]["display_name"]
 
 	# debug
-	print "The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command)
+	print "The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command.encode("utf-8"))
 
 	# begin processing commands
 	response, attachment_response = joke.joke().begin(command,user)
@@ -82,7 +82,7 @@ def handle_command(command, channel, user):
 	#CouchPotato Functionality
 	if command.startswith('movie'):
 		couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
-		response = couchPot.begin(command,user)
+		response = couchPot.begin(command.encode("utf-8"),user)
 
 	# ensure the help command is always last
 	if command.startswith('help') or response == None:
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 					handle_command(command, channel, user)
 			except Exception as e:
 				print traceback.format_exc()
-				print "ERROR: The command '" + str(command) + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'"
+				print "ERROR: The command '" + str(command).encode("utf-8") + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'"
 			time.sleep(RTM_READ_DELAY)
 	else:
 		print("Connection failed. Exception traceback printed above.")
