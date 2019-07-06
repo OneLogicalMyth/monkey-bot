@@ -2,13 +2,15 @@ from vendor.fitbit import fitbit
 from vendor.fitbit import gather_keys_oauth2 as Oauth2
 from vendor.fitbit.fitbit.iniHandler import ReadCredentials,ReadTokens,WriteTokens, SaveTokens
 import datetime
+import requests
 
 # Built by https://github.com/itchannel
 class fitbitapi(object):
 
-	def __init__(self, CLIENT_ID, CLIENT_SECRET):
+	def __init__(self, CLIENT_ID, CLIENT_SECRET, apple_key):
 		self.client_id = CLIENT_ID
 		self.client_secret = CLIENT_SECRET
+		self.apple_key = apple_key
 	def begin(self,command):
 
 		# make the command lower for all functions
@@ -46,13 +48,15 @@ class fitbitapi(object):
 			for data in friends["data"]:
 				if data["relationships"]["user"]["data"]["id"] == friend["id"]:
 					if "attributes" in data:
-						result=[friend["attributes"]["name"], data["attributes"]["step-summary"]]
+						result=[friend["attributes"]["name"] + " (Fitbit)", data["attributes"]["step-summary"]]
 					else:
-						result=[friend["attributes"]["name"], 0]
+						result=[friend["attributes"]["name"] + " (Fitbit)", 0]
 
 			results.append(result)
 
 		#result = [googlefitapi[0],googlefitapi[1]]
+		apple_steve = ["Steve (iWatch)",round(self.getApple())];
+		results.append(apple_steve)
 		results.append(result)
 		results = sorted(results,reverse=True, key=self.getKey)
 
@@ -62,6 +66,14 @@ class fitbitapi(object):
 		#del googlefitapi
 
 		return leaderboardlist
+
+
+
+	def getApple(self):
+		URL = "https://1mg.es/stats.php?func=get"
+		r = requests.get(url = URL)
+		print r.text
+		return float(r.text)
 
 	def getKey(self,item):
 		return item[1]
