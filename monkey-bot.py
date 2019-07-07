@@ -71,7 +71,7 @@ def handle_command(command, channel, user):
 		response, attachment_response = portlookup.portlookup().start(command,rootpath)
 
 	if command.startswith('fitness'):
-		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"], config["apple_key"])
+		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"], config["AppleHealth"]["api_key"],config["AppleHealth"]["api_url"])
 		response = obj_fitbit.begin(command)
 	if command.startswith('minecraft'):
 		response, attachment_response = minecraft.minecraft().lookup(command,config["MineCraft"])
