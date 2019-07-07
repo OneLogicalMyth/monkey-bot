@@ -7,10 +7,11 @@ import requests
 # Built by https://github.com/itchannel
 class fitbitapi(object):
 
-	def __init__(self, CLIENT_ID, CLIENT_SECRET, apple_key):
+	def __init__(self, CLIENT_ID, CLIENT_SECRET, api_key, api_url):
 		self.client_id = CLIENT_ID
 		self.client_secret = CLIENT_SECRET
-		self.apple_key = apple_key
+		self.api_key = api_key
+		self.api_url = api_url
 	def begin(self,command):
 
 		# make the command lower for all functions
@@ -31,17 +32,11 @@ class fitbitapi(object):
 		yesterday = str((datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d"))
 		friends = auth2_client.get_friends_leaderboardnew("7d")
 		#print "IVE GOT FRIENDS"
-		leaderboardlist = ""
+		leaderboardlist = "*Step Count (last 7 days)*\n"
 		count = 0
 		#googlefitapi = g_fit.googlefit().get_stats()
 		results = []
-		#Legacy API Code for v1.0 now retired we clean up on next code loop
-		#for friend in friends["friends"]:
-		#	if "averageDailySteps" in friend["user"]:
-		#		result = [friend["user"]["displayName"],friend["user"]["averageDailySteps"]]
-		#	else:
-		#		result = [friend["user"]["displayName"],0]
-		#	results.append(result)
+
 		
 		#new Fitbit API Code
 		for friend in friends["included"]:
@@ -49,31 +44,36 @@ class fitbitapi(object):
 				if data["relationships"]["user"]["data"]["id"] == friend["id"]:
 					if "attributes" in data:
 						result=[friend["attributes"]["name"] + " (Fitbit)", data["attributes"]["step-summary"]]
-					else:
-						result=[friend["attributes"]["name"] + " (Fitbit)", 0]
+						results.append(result)
+					#Uncomment to add users with 0 steps on fitbit
+					#else:
+						#result=[friend["attributes"]["name"] + " (Fitbit)", 0]
+						#results.append(result)
 
-			results.append(result)
+			
 
-		#result = [googlefitapi[0],googlefitapi[1]]
-		apple_steve = ["Steve (iWatch)",round(self.getApple())];
-		results.append(apple_steve)
-		results.append(result)
+		#New Apple Health integration, requires a seperate IOS sync application and API endpoint (Code coming soon)
+		apple_steve = self.getApple()
+		for key, value in apple_steve.iteritems():
+			combined = [key + " (iWatch)",round(float(value))]
+			results.append(combined)
+
 		results = sorted(results,reverse=True, key=self.getKey)
 
 		for result in results:
 			count += 1
 			leaderboardlist += str(count) + ". " + result[0] + " Steps: " + str(result[1]) + ".\n"
-		#del googlefitapi
 
 		return leaderboardlist
 
 
 
 	def getApple(self):
-		URL = "https://1mg.es/stats.php?func=get"
+		#Function to return the Apple stats from the custom API
+		URL = "https://%s?func=get" % self.api_url
 		r = requests.get(url = URL)
-		print r.text
-		return float(r.text)
+		results = r.json()
+		return results
 
 	def getKey(self,item):
 		return item[1]
