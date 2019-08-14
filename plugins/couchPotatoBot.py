@@ -24,6 +24,8 @@ class couchPotato(object):
                         return self.doDownload(command.replace("movies download", ""))
 		elif 'movies wanted' in command:
 			return self.doWanted(command.replace("movies wanted", ""))
+		elif command[-1] == '?':
+			return "No."
 		else:
 			return "Invalid Command"	
 
@@ -87,8 +89,8 @@ class couchPotatoAPI:
                         # print "Movie Name: " + movie["titles"][0]
                         imovie["title"] = movie["titles"][0]
                         if movie["in_library"]:
-                                #print "Allready on Plex"
-                                imovie["status"] = "On Plex allready"
+                                #print "Already on Plex"
+                                imovie["status"] = "On Plex already"
                         elif movie["in_wanted"]:
                                 #print movie["in_wanted"]["status"]
                                 imovie["status"] = "On Wanted List"
