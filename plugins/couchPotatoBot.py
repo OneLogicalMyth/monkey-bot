@@ -22,6 +22,8 @@ class couchPotato(object):
 			return self.doDownload(command.replace("movie download", ""))
 		elif 'movies download' in command:
                         return self.doDownload(command.replace("movies download", ""))
+		elif 'movies wanted' in command:
+			return self.doWanted(command.replace("movies wanted", ""))
 		elif command[-1] == '?':
 			return "No."
 		else:
@@ -47,6 +49,16 @@ class couchPotato(object):
 			return "Invalid ID"
 		movieDownload = couch.downloadMovie(id)
 		return movieDownload
+
+	def doWanted(self,id):
+		couch = couchPotatoAPI(self.couchURL, self.apiKey)
+		movieWanted = couch.getWanted()
+		if movieWanted == False:
+			return "Error occurred"
+		message = "*Current Movies in the watch list:*\n"
+		for movie in movieWanted:
+			message += "* " + movie["title"] + "(" + movie["year"] +")\n"
+		return message
 
 class couchPotatoAPI:
 
@@ -95,6 +107,23 @@ class couchPotatoAPI:
 				imovie["year"] = "0000"
                         movies.append(imovie)
 		return movies
+
+
+	def getWanted(self):
+                url = self.rooturl + '/api/' + self.apikey + '/media.list?type=movie&status=active'
+                request = requests.get(url)
+                json_data = json.loads(request.text)
+                if json_data["success"] == False:
+                        return False
+                elif json_data["success"] == True:
+			movies = []
+			for movie in json_data["movies"]:
+				print movie
+				imovie = {}
+				imovie["title"] = movie["title"]
+				imovie["year"] = str(movie["info"]["year"])
+				movies.append(imovie)
+                        return movies
 
 
 
