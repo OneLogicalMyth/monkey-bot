@@ -23,6 +23,10 @@ class help(object):
 
 		if command.startswith('help movies'):
 			attachments.append(self.movies())
+		
+		if command.startswith('help tv'):
+			attachments.append(self.tv())
+
 		if command == 'help' or len(attachments) == 0:
 			attachments.append({
 			"fallback": "help all",
@@ -31,7 +35,7 @@ class help(object):
 			"fields": [
 				{
 				"title": "Help Topics",
-				"value": "fitness\nport\nrtfm\nminecraft\nmovies\n\nYou can also do `help all`.",
+				"value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\n\nYou can also do `help all`.",
 				"short": True
 				}			
 			]
@@ -113,6 +117,27 @@ class help(object):
 					{
                                         "title": "Movie Download",
                                         "value": "movies download id",
+                                        "short": True
+                                        },
+                                ]
+                                }
+
+	
+	def tv(self):
+
+                 return {
+                                "fallback": "You can try 'tv'",
+                                "title": "tv Commands",
+                                "text": "The following commands can be used.",
+                                "fields": [
+                                        {
+                                        "title": "TV Today",
+                                        "value": "tv today",
+                                        "short": True
+                                        },
+					{
+                                        "title": "TV Latest",
+                                        "value": "tv latest",
                                         "short": True
                                         },
                                 ]
