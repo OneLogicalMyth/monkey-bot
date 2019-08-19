@@ -87,6 +87,10 @@ def handle_command(command, channel, user):
 	if command.startswith('tv'):
 		sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"],config["sickRage"]["sickApi"],config["whitelistedusers"])
 		response, attachment_response = sickChill.begin(command.encode("utf-8"),user)
+	
+	if command.startswith('plex'):
+		plex = plexBot.plex(config["plex"]["plexURL"],config["plex"]["plexApi"],config["whitelistedusers"])
+		response, attachment_response = plex.begin(command.encode("utf-8"),user)
 
 	# ensure the help command is always last
 	if command.startswith('help') or response == None:

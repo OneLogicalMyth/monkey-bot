@@ -26,6 +26,9 @@ class help(object):
 		
 		if command.startswith('help tv'):
 			attachments.append(self.tv())
+		
+		if command.startswith('help plex'):
+			attachments.append(self.plex())
 
 		if command == 'help' or len(attachments) == 0:
 			attachments.append({
@@ -35,7 +38,7 @@ class help(object):
 			"fields": [
 				{
 				"title": "Help Topics",
-				"value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\n\nYou can also do `help all`.",
+				"value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\nplex\n\nYou can also do `help all`.",
 				"short": True
 				}			
 			]
@@ -138,6 +141,31 @@ class help(object):
 					{
                                         "title": "TV Latest",
                                         "value": "tv latest",
+                                        "short": True
+                                        },
+                                ]
+                                }
+
+	def plex(self):
+
+                 return {
+                                "fallback": "You can try 'plex'",
+                                "title": "Plex Commands",
+                                "text": "The following commands can be used.",
+                                "fields": [
+                                        {
+                                        "title": "Currently being watched",
+                                        "value": "plex watching",
+                                        "short": True
+                                        },
+					{
+                                        "title": "Most popular movies on plex",
+                                        "value": "plex popular",
+                                        "short": True
+                                        },
+										{
+                                        "title": "Plex Library Stats",
+                                        "value": "plex library",
                                         "short": True
                                         },
                                 ]
