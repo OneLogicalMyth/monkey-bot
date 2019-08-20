@@ -1,1 +1,1 @@
-__all__ = ["joke","portlookup","userlookup","bothelp","fitbitapi","rtfm", "minecraft", "couchPotatoBot","sickPotatoBot"]
+__all__ = ["joke","portlookup","userlookup","bothelp","fitbitapi","rtfm", "minecraft", "couchPotatoBot","sickPotatoBot","plexBot"]
