@@ -14,7 +14,6 @@ class sickChill(object):
         command = command.lower()
         response = None
         needs_help = False
-        print command
         if user not in self.users:
 		    return "This function is currently only avaliable to contributors to say thanks"
         if 'tv today' in command:
@@ -22,14 +21,16 @@ class sickChill(object):
         elif 'tv latest' in command:
 		    return self.getLatest()
         elif command[-1] == '?':
-		    return "No."
+		    return "No.", False
         else:
-		    return "Invalid Command"	
+		    return "Invalid Command", False	
 
 
     def getToday(self):
         sick = sickChillAPI(self.sickURL, self.apiKey)
         tvtoday = sick.Today()
+        if tvtoday == "Empty":
+            return "No shows airing today", False
         showlist = []
         for show in tvtoday:
             fields = []
@@ -43,15 +44,21 @@ class sickChill(object):
         sick = sickChillAPI(self.sickURL, self.apiKey)
         tvtoday = sick.Today()
         tvlatest = sick.Latest()
+        if tvtoday == "Empty":
+            tvtoday = []
+        if tvlatest == "Empty":
+            tvlatest = []
+        if len(tvlatest) == 0 & len(tvtoday) == 0:
+            return "Now shows in the next 7 days", False
         showlist = []
         for show in tvtoday:
             fields = []
             fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
-            showlist.append({"fallback": "blah", "fields": fields})
+            showlist.append({"fallback": "Todays Shows", "fields": fields})
         for show in tvlatest:
             fields = []
             fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
-            showlist.append({"fallback": "blah", "fields": fields})
+            showlist.append({"fallback": "Next 7 days shows", "fields": fields})
         #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
         return message, True
@@ -73,6 +80,8 @@ class sickChillAPI:
             if json_data["result"] !="success":
                 return False
             elif json_data["result"] == "success":
+                if len(json_data["data"]["today"]) == 0:
+                    return "Empty"
                 shows = []
                 for show in json_data["data"]["today"]:
                     ishow = {}
@@ -90,6 +99,8 @@ class sickChillAPI:
             if json_data["result"] !="success":
                 return False
             elif json_data["result"] == "success":
+                if len(json_data["data"]["soon"]) == 0:
+                    return "Empty"
                 shows = []
                 for show in json_data["data"]["soon"]:
                     ishow = {}
@@ -99,4 +110,8 @@ class sickChillAPI:
                     ishow["airs"] = show["airs"]
                     shows.append(ishow)
                 return shows
+
+
+
+
 
