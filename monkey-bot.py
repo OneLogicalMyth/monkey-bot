@@ -55,6 +55,7 @@ def handle_command(command, channel, user):
 		Executes bot command if the command is known
 	"""
 	response = None
+	default_response = "ERROR"
 
 	# grabs calling user info
 	user_info = slack_client.api_call(
