@@ -26,12 +26,15 @@ def parse_bot_commands(slack_events):
 		If its not found, then this function returns None, None.
 	"""
 	for event in slack_events:
+		
 		if event["type"] == "message" and not "subtype" in event:
-
 			# if direct message you don't need @BotName
 			if event["channel"].startswith('D') and not event["user"] == bot_id:
 			   return event["text"], event["channel"], event["user"]
 
+			#Add Tools monitoring
+			if event["channel"].startswith('GPMC') and not event["user"] == bot_id:
+			   return event["text"], event["channel"], event["user"]
 			# look for @BotName in channel
 			user_id, message = parse_direct_mention(event["text"])
 			if user_id == bot_id:
@@ -65,7 +68,20 @@ def handle_command(command, channel, user):
 	print "The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command.encode("utf-8"))
 
 	# begin processing commands
+
+
+
+
 	response, attachment_response = joke.joke().begin(command,user)
+
+	 #Handle Tool Channel links
+
+        if channel.startswith(config["Monitoring"]["channel"]):
+                print "found"
+                #github = GitBot.tools(config["Monitoring"]["github_
+                #response = github.beging(command.encode("utf-8"), user)
+                response = "Coming Soon"
+
 
 	if command.startswith('port'):
 		response, attachment_response = portlookup.portlookup().start(command,rootpath)
