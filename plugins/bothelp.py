@@ -143,6 +143,11 @@ class help(object):
                                         "value": "tv latest",
                                         "short": True
                                         },
+                                        {
+                                        "title": "TV Search",
+                                        "value": "tv search",
+                                        "short": True
+                                        },
                                 ]
                                 }
 
