@@ -20,11 +20,39 @@ class sickChill(object):
 		    return self.getToday()
         elif 'tv latest' in command:
 		    return self.getLatest()
+        elif 'tv search' in command:
+            return self.getSearch(command.replace("tv search", ""))
+        elif 'tv download' in command:
+            return self.getDownload(command.replace("tv download", ""))
         elif command[-1] == '?':
 		    return "No.", False
         else:
 		    return "Invalid Command", False	
 
+    def getDownload(self, searchstr):
+        sick = sickChillAPI(self.sickURL, self.apiKey)
+        download = sick.downloadTvShow(searchstr)
+        if download == "An existing indexerid already exists in database":
+            return "Tv Show allready added", False
+        elif "could not be parsed into" in download:
+            return "Tv Show ID invalid, Full Error: " + download, False
+        elif "queued to be added" in download:
+            return "Success: " + download + "\n *WARNING: This will only add future episodes, contact steve to add past episodes*", False
+        return download, False
+
+    def getSearch(self,seachstr):
+        sick = sickChillAPI(self.sickURL, self.apiKey)
+        tvshows = sick.searchTvShows(seachstr)
+        if tvshows == "Empty":
+            return "No tvshows found", False
+        showlist =[]
+        for show in tvshows:
+            fields = []
+            fields.append({"short": False, "title": show["name"] , "value": "*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
+            showlist.append({"fallback": "blah", "fields": fields})
+        #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
+        message = showlist
+        return message, True
 
     def getToday(self):
         sick = sickChillAPI(self.sickURL, self.apiKey)
@@ -110,6 +138,40 @@ class sickChillAPI:
                     ishow["airs"] = show["airs"]
                     shows.append(ishow)
                 return shows
+
+
+        def searchTvShows(self, search):
+            url = self.rooturl + '/api/' + self.apikey + '/?cmd=sb.searchindexers&only_new=0&name=' + search
+            request = requests.get(url)
+            json_data = json.loads(request.text)
+            if json_data["result"] !="success":
+                return False
+            elif json_data["result"] == "success":
+                if len(json_data["data"]["results"]) == 0:
+                    return "Empty"
+                shows = []
+                for show in json_data["data"]["results"]:
+                    ishow = {}
+                    ishow["first_aired"] = show["first_aired"]
+                    if show["in_show_list"] == True:
+                        ishow["in_show_list"] = "Yes"
+                    else:
+                        ishow["in_show_list"] = "No"
+                    ishow["name"] = show["name"]
+                    ishow["id"] = show["tvdbid"]
+                    shows.append(ishow)
+                return shows
+
+
+        def downloadTvShow(self, id):
+            url = self.rooturl + '/api/' + self.apikey + "?cmd=show.addnew&indexerid=268592&status=ignored&tvdbid=" + id
+            request = requests.get(url)
+            json_data = json.loads(request.text)
+            if json_data["result"] !="success":
+                return json_data["message"]
+            elif json_data["result"] == "success":
+                return json_data["message"]
+        
 
 
 
