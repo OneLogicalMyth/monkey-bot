@@ -33,6 +33,6 @@ class myzone(object):
             board = [obj for obj in leaderboard["data"] if(obj['nickname'] in self.nicknames)]
             output = "*My Zone Leaderboard*\n"
             for person in board:
-                output += person["name"] + " - MEPS " + person["score"]
+                output = output + person["name"] + " - MEPS " + str(person["score"]) + "\n"
             return output
             self.logout()
