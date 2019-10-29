@@ -85,10 +85,10 @@ def handle_command(command, channel, user):
 		response, attachment_response = portlookup.portlookup().start(command,rootpath)
 
 	if command.startswith('fitness meps'):
-		z = myzone.myzone(config["myzone"]["username"],config["myzone"]["password"],config["myzone"]["nicknames"])
-		response = z.leaderboard()	
-		
-	if command.startswith('fitness'):
+                z = myzone.myzone(config["myzone"]["username"],config["myzone"]["password"],config["myzone"]["nicknames"])
+                response = z.leaderboard()
+
+	if command.startswith('fitness leaderboard'):
 		obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"], config["AppleHealth"]["api_key"],config["AppleHealth"]["api_url"])
 		response = obj_fitbit.begin(command)
 	if command.startswith('minecraft'):
