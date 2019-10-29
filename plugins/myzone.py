@@ -5,9 +5,10 @@ import datetime, json, urllib3
 
 class myzone(object):
 
-    def __init__(self,username,password):
+    def __init__(self,username,password,nicknames):
         self.username = username
         self.password = password
+        self.nicknames = nicknames
         self.login()
 
     def login(self):
@@ -24,11 +25,14 @@ class myzone(object):
 
     def leaderboard(self,nicknames=None):
         # nicknames should be in the format of ["nick1","nick2","nick3"]
-        response = requests.get('https://www.myzonemoves.com/sessioncalls/leaderboard/', cookies=self.phpsession)                                                                                                                                    leaderboard = response.json()                                                                                                                                                                                                                if 'error' in leaderboard:
+        response = requests.get('https://www.myzonemoves.com/sessioncalls/leaderboard/', cookies=self.phpsession)
+        leaderboard = response.json()                                                                                                                                                                                                                
+        if 'error' in leaderboard:
             return False
         else:
-            if nicknames == None:
-                return leaderboard["data"]
-            else:
-                filterout = [obj for obj in leaderboard["data"] if(obj['nickname'] in nicknames)]
-                return filterout
+            board = [obj for obj in leaderboard["data"] if(obj['nickname'] in self.nicknames)]
+            output = "*My Zone Leaderboard*\n"
+            for person in board:
+                output += person["name"] + " - MEPS " + person["score"]
+            return output
+            self.logout()
