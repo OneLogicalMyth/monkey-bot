@@ -105,7 +105,6 @@ def ReadTokens():
 		print_json("status", "Read of %s successful." %tokensFile)
 		return AccToken, RefToken
 def SaveTokens(test):
-	print test
 	WriteTokens(test["access_token"],test["refresh_token"])
 
 def WriteTokens(AccToken,RefToken):

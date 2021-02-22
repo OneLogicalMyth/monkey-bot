@@ -23,7 +23,7 @@ class fitbitapi(object):
 
 
 	def getleaderboard(self):
-		print "Getting leaderboard"
+		print("Getting leaderboard")
 		#print self.client_id
 		#, self.client_secret = ReadCredentials()
 		self.ACCESS_TOKEN, self.REFRESH_TOKEN = ReadTokens()

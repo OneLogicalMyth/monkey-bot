@@ -65,7 +65,7 @@ def handle_command(command, channel, user):
 	user_display_name = user_info["user"]["profile"]["display_name"]
 
 	# debug
-	print "The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command.encode("utf-8"))
+	print("The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command.encode("utf-8")))
 
 	# begin processing commands
 
@@ -75,10 +75,9 @@ def handle_command(command, channel, user):
 	response, attachment_response = joke.joke().begin(command,user)
 
 	 #Handle Tool Channel links
-
-        if channel.startswith(config["Monitoring"]["channel"]):
-                github = GitBot.GitBot(config["Monitoring"]["github_api"], config["Monitoring"]["username"], config["Monitoring"]["password"], config["Monitoring"]["github_toolfile"] )
-                response = github.begin(command.encode("utf-8"), user)
+	if channel.startswith(config["Monitoring"]["channel"]):
+		github = GitBot.GitBot(config["Monitoring"]["github_api"], config["Monitoring"]["username"], config["Monitoring"]["password"], config["Monitoring"]["github_toolfile"] )
+		response = github.begin(command.encode("utf-8"), user)
 
 
 	if command.startswith('port'):
@@ -101,19 +100,19 @@ def handle_command(command, channel, user):
 	if "couchPotato" in config:
 		if command.startswith('movie'):
 			couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
-			response = couchPot.begin(command.encode("utf-8"),user)
+			response = couchPot.begin(command,user)
 	elif "radarr" in config:
 		if command.startswith('movie'):
 			radarr = radarrBot.radarr(config["radarr"]["radarrURL"],config["radarr"]["radarrApi"],config["whitelistedusers"])
-			response = radarr.begin(command.encode("utf-8"),user)
+			response = radarr.begin(command,user)
 	if "sickRage" in config:
 		if command.startswith('tv'):
 			sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"],config["sickRage"]["sickApi"],config["whitelistedusers"])
-			response, attachment_response = sickChill.begin(command.encode("utf-8"),user)
+			response, attachment_response = sickChill.begin(command,user)
 	elif "sonarr" in config:
 		if command.startswith('tv'):
 			sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"],config["sonarr"]["sonarrApi"],config["whitelistedusers"])
-			response, attachment_response = sonarr.begin(command.encode("utf-8"),user)
+			response, attachment_response = sonarr.begin(command,user)
 	
 	if command.startswith('plex'):
 		plex = plexBot.plex(config["plex"]["plexURL"],config["plex"]["plexApi"],config["whitelistedusers"])
@@ -163,8 +162,8 @@ if __name__ == "__main__":
 					command = command.lower()
 					handle_command(command, channel, user)
 			except Exception as e:
-				print traceback.format_exc()
-				print "ERROR: The command '" + str(command).encode("utf-8") + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'"
+				print(traceback.format_exc())
+				print("ERROR: The command '" + str(command).encode("utf-8") + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'")
 			time.sleep(RTM_READ_DELAY)
 	else:
 		print("Connection failed. Exception traceback printed above.")

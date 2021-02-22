@@ -20,16 +20,15 @@ class minecraft(object):
 
 		return [{"fallback": "Minecraft Update", "fields": outputs}]
 
-        def lookup(self,command,servers):
+	def lookup(self,command,servers):
 		message = 'Sorry I do not understand what your trying to search.'
-                attachment = False
+		attachment = False
 
-                if command.startswith('minecraft'):
-
+		if command.startswith('minecraft'):
 			message = []
 			for server in servers:
 				message += self.getMinecraftData(server)
-			attachment = True
+				attachment = True
 
-                return message, attachment
+		return message, attachment
 

@@ -1,13 +1,11 @@
 import sqlite3
 class rtfm(object):
-
-	
-        def lookup(self,command,rootPath):
-                message = 'Sorry I do not understand what your trying to search.'
-                attachment = False
+	def lookup(self,command,rootPath):
+		message = 'Sorry I do not understand what your trying to search.'
+		attachment = False
 		rootPath = "/opt/monkey-bot"
 
-                if command.startswith('rtfm'):
+		if command.startswith('rtfm'):
 			sqlcmd = []
 			sqltpl = []
 			sqllst = []

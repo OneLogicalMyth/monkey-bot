@@ -3,25 +3,25 @@ import json
 import urllib
 class radarr(object):
 
-        def __init__(self, couchURL, apikey,whitelistedusers):
-                self.couchURL = couchURL
-                self.apiKey = apikey
+	def __init__(self, couchURL, apikey,whitelistedusers):
+		self.couchURL = couchURL
+		self.apiKey = apikey
 		self.users = whitelistedusers
-        def begin(self,command,user):
-                # make the command lower for all functions
-                command = command.lower()
-                response = None
-                needs_help = False
+	def begin(self,command,user):
+		# make the command lower for all functions
+		command = command.lower()
+		response = None
+		needs_help = False
 		if user not in self.users:
 			return "This function is currently only avaliable to contributors to say thanks"
-                if 'movies search' in command:
+		if 'movies search' in command:
 			return self.doSearch(command.replace("movies search", ""))
 		elif 'movie search' in command:
 			return self.doSearch(command.replace("movie search", ""))
 		elif 'movie download' in command:
 			return self.doDownload(command.replace("movie download", ""))
 		elif 'movies download' in command:
-                        return self.doDownload(command.replace("movies download", ""))
+						return self.doDownload(command.replace("movies download", ""))
 		elif 'movies wanted' in command:
 			return self.doWanted(command.replace("movies wanted", ""))
 		elif command[-1] == '?':
@@ -39,7 +39,7 @@ class radarr(object):
 			return "No results found for the specified search"
 		message = "I found the following movies:\n"
 		for movie in searchList:
-		    message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
+			message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
 
 		return message
 
@@ -63,9 +63,9 @@ class radarr(object):
 class radarrAPI:
 	
 
-        def __init__(self, url, apikey):
-            self.rooturl = url
-            self.apikey = apikey
+	def __init__(self, url, apikey):
+		self.rooturl = url
+		self.apikey = apikey
 
 	def printapi(self):
 		 return self.apikey

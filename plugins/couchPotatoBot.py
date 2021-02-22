@@ -3,25 +3,26 @@ import json
 import urllib
 class couchPotato(object):
 
-        def __init__(self, couchURL, apikey,whitelistedusers):
-                self.couchURL = couchURL
-                self.apiKey = apikey
+	def __init__(self, couchURL, apikey,whitelistedusers):
+		self.couchURL = couchURL
+		self.apiKey = apikey
 		self.users = whitelistedusers
-        def begin(self,command,user):
-                # make the command lower for all functions
-                command = command.lower()
-                response = None
-                needs_help = False
+	
+	def begin(self,command,user):
+		# make the command lower for all functions
+		command = command.lower()
+		response = None
+		needs_help = False
 		if user not in self.users:
 			return "This function is currently only avaliable to contributors to say thanks"
-                if 'movies search' in command:
+		if 'movies search' in command:
 			return self.doSearch(command.replace("movies search", ""))
 		elif 'movie search' in command:
 			return self.doSearch(command.replace("movie search", ""))
 		elif 'movie download' in command:
 			return self.doDownload(command.replace("movie download", ""))
 		elif 'movies download' in command:
-                        return self.doDownload(command.replace("movies download", ""))
+						return self.doDownload(command.replace("movies download", ""))
 		elif 'movies wanted' in command:
 			return self.doWanted(command.replace("movies wanted", ""))
 		elif command[-1] == '?':
@@ -39,7 +40,7 @@ class couchPotato(object):
 			return "No results found for the specified search"
 		message = "I found the following movies:\n"
 		for movie in searchList:
-		    message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
+			message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
 
 		return message
 
@@ -63,74 +64,72 @@ class couchPotato(object):
 class couchPotatoAPI:
 
 
-        def __init__(self, url, apikey):
-                self.rooturl = url
-                self.apikey = apikey
+	def __init__(self, url, apikey):
+		self.rooturl = url
+		self.apikey = apikey
 
 
 
 
 
-        def printapi(self):
-
-                return self.apikey
-
+	def printapi(self):
+		return self.apikey
 
 
-        def searchMovies(self,name):
-                url = self.rooturl + '/api/' + self.apikey + '/search?q=' + urllib.quote_plus(name)
-                request = requests.get(url)
-                json_data = json.loads(request.text)
+
+	def searchMovies(self,name):
+		url = self.rooturl + '/api/' + self.apikey + '/search?q=' + urllib.quote_plus(name)
+		request = requests.get(url)
+		json_data = json.loads(request.text)
 		if "movies" not in json_data:
 			return "Error"
-                movies = []
-                for movie in json_data["movies"]:
-                        imovie = {}
-                        # print "Movie Name: " + movie["titles"][0]
-                        imovie["title"] = movie["titles"][0]
-                        if movie["in_library"]:
-                                #print "Already on Plex"
-                                imovie["status"] = "On Plex already"
-                        elif movie["in_wanted"]:
-                                #print movie["in_wanted"]["status"]
-                                imovie["status"] = "On Wanted List"
-                        else :
-                                imovie["status"] = "Can be Added"
-                        if "imdb" in movie:
-                                #print "ID: " + str(movie["imdb"])
-                                imovie["imdb"] = movie["imdb"]
+		movies = []
+		for movie in json_data["movies"]:
+			imovie = {}
+			# print "Movie Name: " + movie["titles"][0]
+			imovie["title"] = movie["titles"][0]
+			if movie["in_library"]:
+				#print "Already on Plex"
+				imovie["status"] = "On Plex already"
+			elif movie["in_wanted"]:
+				#print movie["in_wanted"]["status"]
+				imovie["status"] = "On Wanted List"
+			else :
+				imovie["status"] = "Can be Added"
+			if "imdb" in movie:
+				#print "ID: " + str(movie["imdb"])
+				imovie["imdb"] = movie["imdb"]
 			else:
 				imovie["imdb"] = "unknown"
 			if "year" in movie:
 				imovie["year"] = str(movie["year"])
 			else:
 				imovie["year"] = "0000"
-                        movies.append(imovie)
+			movies.append(imovie)
 		return movies
 
 
 	def getWanted(self):
-                url = self.rooturl + '/api/' + self.apikey + '/media.list?type=movie&status=active'
-                request = requests.get(url)
-                json_data = json.loads(request.text)
-                if json_data["success"] == False:
-                        return False
-                elif json_data["success"] == True:
+		url = self.rooturl + '/api/' + self.apikey + '/media.list?type=movie&status=active'
+		request = requests.get(url)
+		json_data = json.loads(request.text)
+		if json_data["success"] == False:
+			return False
+		elif json_data["success"] == True:
 			movies = []
 			for movie in json_data["movies"]:
-				print movie
 				imovie = {}
 				imovie["title"] = movie["title"]
 				imovie["year"] = str(movie["info"]["year"])
 				movies.append(imovie)
-                        return movies
+		return movies
 
 
 
 	def downloadMovie(self,id):
 		url = self.rooturl + '/api/' + self.apikey + '/movie.add/?identifier=' + urllib.quote_plus(id)
-                request = requests.get(url)
-                json_data = json.loads(request.text)
+		request = requests.get(url)
+		json_data = json.loads(request.text)
 		if json_data["success"] == False:
 			return "Failed to download movie, is the ID valid?"
 		elif json_data["success"] == True:
