@@ -48,7 +48,7 @@ class sonarr(object):
         showlist =[]
         for show in tvshows:
             fields = []
-            fields.append({"short": False, "title": show["name"] , "value": "*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
+            fields.append({"short": False, "title": show["name"] ,"value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
             showlist.append({"fallback": "blah", "fields": fields})
         #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
@@ -156,21 +156,45 @@ class sonarrAPI:
                     else:
                         ishow["in_show_list"] = "No"
                     ishow["name"] = show["title"]
+                    if "overview" in show:
+                        ishow["overview"] = show["overview"]
+                    else:
+                        ishow["overview"] = "Missing"
                     ishow["id"] = show["tvdbId"]
                     shows.append(ishow)
                 return shows
 
 
         def downloadTvShow(self, id):
-            #Need to write this to be compatible with Sonarr, will have to call the lookup endpoint then post
-            return "Coming Soon"
-            url = self.rooturl + '/api/' + self.apikey + "?cmd=show.addnew&indexerid=268592&status=ignored&tvdbid=" + id
-            request = requests.post(url)
+            url = self.rooturl + '/api/series/lookup?apikey=' + self.apikey + '&term=tvdbid:' + id
+            request = requests.get(url)
             json_data = json.loads(request.text)
-            if json_data["result"] !="success":
-                return json_data["message"]
-            elif json_data["result"] == "success":
-                return json_data["message"]
+            if len(json_data) < 1:
+                return "Failed to add Tv Show, is the ID valid?"
+            else:
+                postdata = {
+                    "title" : json_data[0]["title"],
+				    "tvdbId": json_data[0]["tvdbId"],
+				    "ProfileId": "6",
+				    "monitored": "true",
+				    "rootFolderPath" : "/movies/",
+				    "apiKey": self.apikey,
+				    "titleSlug": json_data[0]["titleSlug"],
+				    "images": json_data[0]["images"],
+                    "seasons": json_data[0]["seasons"]
+                    
+                }
+            url = self.rooturl + '/api/series?apikey=' + self.apikey
+            newHeaders = {'Content-type': 'application/json'}
+            bob = json.dumps(postdata)
+            request = requests.post(url, data=bob, headers=newHeaders)
+            json_data = json.loads(request.text)
+            print(request.text)
+            if request.status_code == 400:
+                return "Tv Show already in plex library"
+            else:
+                return "Tv Show added to library, any future episodes will be downloaded. For past episodes contact Steve"
+
         
 
 

@@ -101,19 +101,19 @@ class radarrAPI:
 
 
 	def getWanted(self):
-                url = self.rooturl + '/api/v3/movie/id?' + self.apikey + '/media.list?type=movie&status=active'
-                request = requests.get(url)
-                json_data = json.loads(request.text)
-                if json_data["success"] == False:
-                        return False
-                elif json_data["success"] == True:
+		url = self.rooturl + '/api/v3/calendar?apikey=' + self.apikey + "&unmonitored=false&start=2021-02-22&end=2030-01-01"
+		request = requests.get(url)
+		json_data = json.loads(request.text)
+		if len(json_data) < 1:
+			return False
+		else:
 			movies = []
-			for movie in json_data["movies"]:
+			for movie in json_data:
 				imovie = {}
 				imovie["title"] = movie["title"]
-				imovie["year"] = str(movie["info"]["year"])
+				imovie["year"] = str(movie["year"])
 				movies.append(imovie)
-                        return movies
+			return movies
 
 
 
