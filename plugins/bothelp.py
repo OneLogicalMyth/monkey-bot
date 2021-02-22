@@ -72,7 +72,10 @@ class help(object):
 					"title": "Pentest Monkeys Leaderboard",
 					"value": "fitness leaderboard",
 					"short": True
-					}
+					}, 
+                                        {
+                                                "title": "Fitness MEPS"
+                                        }
 				]
 				}
 	def rtfm(self):
