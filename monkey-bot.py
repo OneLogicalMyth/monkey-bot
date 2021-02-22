@@ -98,9 +98,14 @@ def handle_command(command, channel, user):
 		response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
 
 	#CouchPotato Functionality
-	if command.startswith('movie'):
-		couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
-		response = couchPot.begin(command.encode("utf-8"),user)
+	if "couchPotato" in config:
+		if command.startswith('movie'):
+			couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
+			response = couchPot.begin(command.encode("utf-8"),user)
+	elif "radarr" in config:
+		if command.startswith('movie'):
+			radarr = radarrBot.radarr(config["radarr"]["radarrURL"],config["radarr"]["radarrApi"],config["whitelistedusers"])
+			response = radarr.begin(command.encode("utf-8"),user)
 	if "sickRage" in config:
 		if command.startswith('tv'):
 			sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"],config["sickRage"]["sickApi"],config["whitelistedusers"])
