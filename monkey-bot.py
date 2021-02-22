@@ -101,14 +101,22 @@ def handle_command(command, channel, user):
 	if command.startswith('movie'):
 		couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
 		response = couchPot.begin(command.encode("utf-8"),user)
-
-	if command.startswith('tv'):
-		sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"],config["sickRage"]["sickApi"],config["whitelistedusers"])
-		response, attachment_response = sickChill.begin(command.encode("utf-8"),user)
+	if "sickRage" in config:
+		if command.startswith('tv'):
+			sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"],config["sickRage"]["sickApi"],config["whitelistedusers"])
+			response, attachment_response = sickChill.begin(command.encode("utf-8"),user)
+	elif "sonarr" in config:
+		if command.startswith('tv'):
+			sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"],config["sonarr"]["sonarrApi"],config["whitelistedusers"])
+			response, attachment_response = sonarr.begin(command.encode("utf-8"),user)
 	
 	if command.startswith('plex'):
 		plex = plexBot.plex(config["plex"]["plexURL"],config["plex"]["plexApi"],config["whitelistedusers"])
 		response, attachment_response = plex.begin(command.encode("utf-8"),user)
+
+	if command.startswith('stocks'):
+		stock = stockBot.stocks(config["Stocks"]["stockURL"],config["Stocks"]["stockApi"])
+		response, attachment_response = stock.begin(command.encode("utf-8"),user)
 
 	# ensure the help command is always last
 	if command.startswith('help') or response == None:
