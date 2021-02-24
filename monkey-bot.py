@@ -138,10 +138,10 @@ def handle_command(command, channel, user):
     if attachment_response:
         slack_client.api_call(
             "chat.postMessage",
-             channel=channel,
-             as_user=True,
-             attachments=response or default_response
-            )
+            channel=channel,
+            as_user=True,
+            attachments=response or default_response
+        )
     else:
         slack_client.api_call(
             "chat.postMessage",
@@ -149,7 +149,7 @@ def handle_command(command, channel, user):
             as_user=True,
             unfurl_links=False,
             text=response or default_response
-            )
+        )
 
 
 if __name__ == "__main__":
