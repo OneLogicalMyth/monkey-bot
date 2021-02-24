@@ -34,20 +34,21 @@ def parse_bot_commands(slack_events):
         If its not found, then this function returns None, None.
     """
     for event in slack_events:
-        if event["type"] == "message" and not "subtype" in event:
+        if event["type"] == "message" and "subtype" not in event:
             # if direct message you don't need @BotName
             if event["channel"].startswith('D') and not event["user"] == bot_id:
-               return event["text"], event["channel"], event["user"]
+                return event["text"], event["channel"], event["user"]
 
-            #Add Tools monitoring
+            # Add Tools monitoring
             if event["channel"].startswith(config["Monitoring"]["channel"]) and not event["user"] == bot_id:
-               return event["text"], event["channel"], event["user"]
+                return event["text"], event["channel"], event["user"]
             # look for @BotName in channel
             user_id, message = parse_direct_mention(event["text"])
             if user_id == bot_id:
                 return message, event["channel"], event["user"]
 
     return None, None, None
+
 
 def parse_direct_mention(message_text):
     """
@@ -57,6 +58,7 @@ def parse_direct_mention(message_text):
     matches = re.search(MENTION_REGEX, message_text)
     # the first group contains the username, the second group contains the remaining message
     return (matches.group(1), matches.group(2).strip()) if matches else (None, None)
+
 
 def handle_command(command, channel, user):
     """
@@ -73,7 +75,7 @@ def handle_command(command, channel, user):
     user_display_name = user_info["user"]["profile"]["display_name"]
 
     # debug
-    print("The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel,user,command.encode("utf-8")))
+    print("The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel, user, command.encode("utf-8")))
 
     # begin processing commands
 
@@ -82,7 +84,7 @@ def handle_command(command, channel, user):
 
     response, attachment_response = joke.joke().begin(command,user)
 
-     #Handle Tool Channel links
+    # Handle Tool Channel links
     if channel.startswith(config["Monitoring"]["channel"]):
         github = GitBot.GitBot(config["Monitoring"]["github_api"], config["Monitoring"]["username"], config["Monitoring"]["password"], config["Monitoring"]["github_toolfile"] )
         response = github.begin(command.encode("utf-8"), user)
@@ -100,11 +102,11 @@ def handle_command(command, channel, user):
         response = obj_fitbit.begin(command)
     if command.startswith('minecraft'):
         response, attachment_response = minecraft.minecraft().lookup(command,config["MineCraft"])
-    #RTFM quick guide
+    # RTFM quick guide
     if command.startswith('rtfm'):
         response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
 
-    #CouchPotato Functionality
+    # CouchPotato Functionality
     if "couchPotato" in config:
         if command.startswith('movie'):
             couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
