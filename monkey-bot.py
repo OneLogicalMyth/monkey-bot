@@ -86,7 +86,7 @@ def handle_command(command, channel, user):
         response = github.begin(command.encode("utf-8"), user)
 
     if command.startswith('port'):
-        response, attachment_response = portlookup.portlookup().start(command,rootpath)
+        response, attachment_response = portlookup.portlookup().start(command, rootpath)
 
     if command.startswith('fitness meps'):
         z = myzone.myzone(config["myzone"]["username"], config["myzone"]["password"], config["myzone"]["nicknames"])
@@ -96,7 +96,7 @@ def handle_command(command, channel, user):
         obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"], config["FitBit"]["CLIENT_SECRET"], config["AppleHealth"]["api_key"], config["AppleHealth"]["api_url"])
         response = obj_fitbit.begin(command)
     if command.startswith('minecraft'):
-        response, attachment_response = minecraft.minecraft().lookup(command,config["MineCraft"])
+        response, attachment_response = minecraft.minecraft().lookup(command, config["MineCraft"])
     # RTFM quick guide
     if command.startswith('rtfm'):
         response, attachment_response = rtfm.rtfm().lookup(command, rootpath)
@@ -118,20 +118,19 @@ def handle_command(command, channel, user):
         if command.startswith('tv'):
             sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"], config["sonarr"]["sonarrApi"], config["whitelistedusers"])
             response, attachment_response = sonarr.begin(command, user)
-    
+
     if command.startswith('plex'):
         plex = plexBot.plex(config["plex"]["plexURL"], config["plex"]["plexApi"], config["whitelistedusers"])
         response, attachment_response = plex.begin(command.encode("utf-8"), user)
 
     if command.startswith('stocks'):
         stock = stockBot.stocks(config["Stocks"]["stockURL"], config["Stocks"]["stockApi"])
-        response, attachment_response = stock.begin(command.encode("utf-8"),user)
+        response, attachment_response = stock.begin(command.encode("utf-8"), user)
 
     # ensure the help command is always last
     if command.startswith('help') or response is None:
         attachment_response = True
         response = bothelp.help().get_help(command)
-
 
     # end processing commands
 
@@ -142,7 +141,7 @@ def handle_command(command, channel, user):
              channel=channel,
              as_user=True,
              attachments=response or default_response
-        )
+            )
     else:
         slack_client.api_call(
             "chat.postMessage",
@@ -150,7 +149,7 @@ def handle_command(command, channel, user):
             as_user=True,
             unfurl_links=False,
             text=response or default_response
-        )
+            )
 
 
 if __name__ == "__main__":
