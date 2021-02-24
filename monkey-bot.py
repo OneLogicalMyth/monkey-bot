@@ -67,12 +67,10 @@ def handle_command(command, channel, user):
     """
     response = None
     default_response = "ERROR"
-
-
     # grabs calling user info
     user_info = slack_client.api_call(
-       "users.info",
-       user=user
+        "users.info",
+        user=user
     )
     user_display_name = user_info["user"]["profile"]["display_name"]
 
@@ -82,54 +80,53 @@ def handle_command(command, channel, user):
 
 
     # begin processing commands
-    response, attachment_response = joke.joke().begin(command,user)
+    response, attachment_response = joke.joke().begin(command, user)
 
     # Handle Tool Channel links
     if channel.startswith(config["Monitoring"]["channel"]):
-        github = GitBot.GitBot(config["Monitoring"]["github_api"], config["Monitoring"]["username"], config["Monitoring"]["password"], config["Monitoring"]["github_toolfile"] )
+        github = GitBot.GitBot(config["Monitoring"]["github_api"], config["Monitoring"]["username"], config["Monitoring"]["password"], config["Monitoring"]["github_toolfile"])
         response = github.begin(command.encode("utf-8"), user)
-
 
     if command.startswith('port'):
         response, attachment_response = portlookup.portlookup().start(command,rootpath)
 
     if command.startswith('fitness meps'):
-                z = myzone.myzone(config["myzone"]["username"],config["myzone"]["password"],config["myzone"]["nicknames"])
+                z = myzone.myzone(config["myzone"]["username"], config["myzone"]["password"], config["myzone"]["nicknames"])
                 response = z.leaderboard()
 
     if command.startswith('fitness leaderboard'):
-        obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"],config["FitBit"]["CLIENT_SECRET"], config["AppleHealth"]["api_key"],config["AppleHealth"]["api_url"])
+        obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"], config["FitBit"]["CLIENT_SECRET"], config["AppleHealth"]["api_key"], config["AppleHealth"]["api_url"])
         response = obj_fitbit.begin(command)
     if command.startswith('minecraft'):
         response, attachment_response = minecraft.minecraft().lookup(command,config["MineCraft"])
     # RTFM quick guide
     if command.startswith('rtfm'):
-        response, attachment_response = rtfm.rtfm().lookup(command,rootpath)
+        response, attachment_response = rtfm.rtfm().lookup(command, rootpath)
 
     # CouchPotato Functionality
     if "couchPotato" in config:
         if command.startswith('movie'):
-            couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"],config["CouchPotato"]["couchApi"],config["whitelistedusers"])
-            response = couchPot.begin(command,user)
+            couchPot = couchPotatoBot.couchPotato(config["CouchPotato"]["couchURL"], config["CouchPotato"]["couchApi"], config["whitelistedusers"])
+            response = couchPot.begin(command, user)
     elif "radarr" in config:
         if command.startswith('movie'):
-            radarr = radarrBot.radarr(config["radarr"]["radarrURL"],config["radarr"]["radarrApi"],config["whitelistedusers"])
-            response = radarr.begin(command,user)
+            radarr = radarrBot.radarr(config["radarr"]["radarrURL"], config["radarr"]["radarrApi"], config["whitelistedusers"])
+            response = radarr.begin(command, user)
     if "sickRage" in config:
         if command.startswith('tv'):
-            sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"],config["sickRage"]["sickApi"],config["whitelistedusers"])
-            response, attachment_response = sickChill.begin(command,user)
+            sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"], config["sickRage"]["sickApi"], config["whitelistedusers"])
+            response, attachment_response = sickChill.begin(command, user)
     elif "sonarr" in config:
         if command.startswith('tv'):
-            sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"],config["sonarr"]["sonarrApi"],config["whitelistedusers"])
-            response, attachment_response = sonarr.begin(command,user)
+            sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"], config["sonarr"]["sonarrApi"], config["whitelistedusers"])
+            response, attachment_response = sonarr.begin(command, user)
     
     if command.startswith('plex'):
-        plex = plexBot.plex(config["plex"]["plexURL"],config["plex"]["plexApi"],config["whitelistedusers"])
-        response, attachment_response = plex.begin(command.encode("utf-8"),user)
+        plex = plexBot.plex(config["plex"]["plexURL"], config["plex"]["plexApi"], config["whitelistedusers"])
+        response, attachment_response = plex.begin(command.encode("utf-8"), user)
 
     if command.startswith('stocks'):
-        stock = stockBot.stocks(config["Stocks"]["stockURL"],config["Stocks"]["stockApi"])
+        stock = stockBot.stocks(config["Stocks"]["stockURL"], config["Stocks"]["stockApi"])
         response, attachment_response = stock.begin(command.encode("utf-8"),user)
 
     # ensure the help command is always last

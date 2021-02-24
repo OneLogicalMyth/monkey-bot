@@ -14,7 +14,7 @@ flake8:
   - pip install psutil flake8 flake8-polyfill pylint pyparsing
   - pip install -r requirements.txt
   script:
-  - flake8 --max-line-length=200 --ignore=F403,F841 *.py
+  - flake8 --max-line-length=200 --ignore=F403,F841,F405 *.py
 
 build:
   stage: build
