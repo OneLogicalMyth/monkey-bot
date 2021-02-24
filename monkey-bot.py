@@ -1,11 +1,17 @@
-import time, re, json, sys, os
+import json
+import os
+import re
+import sys
+import time
 import traceback
+
 from slackclient import SlackClient
 from plugins import *
 
 # get root directory
 file = sys.argv[0]
 rootpath = os.path.dirname(file)
+
 
 # load config file
 with open('/etc/monkey-bot.conf', 'r') as f:
