@@ -20,12 +20,13 @@ with open('/etc/monkey-bot.conf', 'r') as f:
 
 # instantiate Slack client
 slack_client = SlackClient(config["SlackToken"])
-RTM_READ_DELAY = 2 # 2 second delay between reading from RTM
+RTM_READ_DELAY = 2  # 2 second delay between reading from RTM
 MENTION_REGEX = "^<@(|[WU].+?)>(.*)"
 
 
 # starterbot's user ID in Slack: value is assigned after the bot starts up
 bot_id = None
+
 
 def parse_bot_commands(slack_events):
     """
@@ -67,6 +68,7 @@ def handle_command(command, channel, user):
     response = None
     default_response = "ERROR"
 
+
     # grabs calling user info
     user_info = slack_client.api_call(
        "users.info",
@@ -74,14 +76,12 @@ def handle_command(command, channel, user):
     )
     user_display_name = user_info["user"]["profile"]["display_name"]
 
+
     # debug
     print("The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel, user, command.encode("utf-8")))
 
+
     # begin processing commands
-
-
-
-
     response, attachment_response = joke.joke().begin(command,user)
 
     # Handle Tool Channel links
