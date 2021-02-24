@@ -2,7 +2,7 @@ import requests
 import json
 import urllib
 
-class sickChill(object):
+class sonarr(object):
 	
 	def __init__(self, couchURL, apikey,whitelistedusers):
 		self.sickURL = couchURL
@@ -30,7 +30,7 @@ class sickChill(object):
 			return "Invalid Command", False	
 
 	def getDownload(self, searchstr):
-		sick = sickChillAPI(self.sickURL, self.apiKey)
+		sick = sonarrAPI(self.sickURL, self.apiKey)
 		download = sick.downloadTvShow(searchstr)
 		if download == "An existing indexerid already exists in database":
 			return "Tv Show allready added", False
@@ -41,21 +41,21 @@ class sickChill(object):
 		return download, False
 
 	def getSearch(self,seachstr):
-		sick = sickChillAPI(self.sickURL, self.apiKey)
+		sick = sonarrAPI(self.sickURL, self.apiKey)
 		tvshows = sick.searchTvShows(seachstr)
 		if tvshows == "Empty":
 			return "No tvshows found", False
 		showlist =[]
 		for show in tvshows:
 			fields = []
-			fields.append({"short": False, "title": show["name"] , "value": "*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
+			fields.append({"short": False, "title": show["name"] ,"value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
 			showlist.append({"fallback": "blah", "fields": fields})
 		#message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
 		message = showlist
 		return message, True
 
 	def getToday(self):
-		sick = sickChillAPI(self.sickURL, self.apiKey)
+		sick = sonarrAPI(self.sickURL, self.apiKey)
 		tvtoday = sick.Today()
 		if tvtoday == "Empty":
 			return "No shows airing today", False
@@ -69,7 +69,7 @@ class sickChill(object):
 		return message, True
 
 	def getLatest(self):
-		sick = sickChillAPI(self.sickURL, self.apiKey)
+		sick = sonarrAPI(self.sickURL, self.apiKey)
 		tvtoday = sick.Today()
 		tvlatest = sick.Latest()
 		if tvtoday == "Empty":
@@ -94,7 +94,7 @@ class sickChill(object):
 
 
 
-class sickChillAPI:
+class sonarrAPI:
 
 
 		def __init__(self, url, apikey):
@@ -102,75 +102,98 @@ class sickChillAPI:
 			self.apikey = apikey
 
 		def Today(self):
-			url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=today'
+			url = self.rooturl + '/api/calendar?apikey=' + self.apikey
 			request = requests.get(url)
 			json_data = json.loads(request.text)
-			if json_data["result"] !="success":
-				return False
-			elif json_data["result"] == "success":
-				if len(json_data["data"]["today"]) == 0:
-					return "Empty"
+			if len(json_data) < 1:
+				return "Empty"
+			else :
 				shows = []
-				for show in json_data["data"]["today"]:
+				for show in json_data:
 					ishow = {}
-					ishow["showname"] = show["show_name"]
-					ishow["showepisode"] = show["ep_name"]
-					ishow["quality"] = show["quality"]
-					ishow["airs"] = show["airs"]
+					ishow["showname"] = show["series"]["title"]
+					ishow["showepisode"] = show["title"]
+					ishow["quality"] = str(show["series"]["qualityProfileId"])
+					ishow["airs"] = show["airDate"]
 					shows.append(ishow)
 				return shows
 
 		def Latest(self):
-			url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=soon'
+			url = self.rooturl + '/api/calendar?apikey=' + self.apikey
 			request = requests.get(url)
 			json_data = json.loads(request.text)
-			if json_data["result"] !="success":
-				return False
-			elif json_data["result"] == "success":
-				if len(json_data["data"]["soon"]) == 0:
-					return "Empty"
+			if len(json_data) < 1:
+				return "Empty"
+			else :
 				shows = []
-				for show in json_data["data"]["soon"]:
+				for show in json_data:
 					ishow = {}
-					ishow["showname"] = show["show_name"]
-					ishow["showepisode"] = show["ep_name"]
-					ishow["quality"] = show["quality"]
-					ishow["airs"] = show["airs"]
+					ishow["showname"] = show["series"]["title"]
+					ishow["showepisode"] = show["title"]
+					ishow["quality"] = str(show["series"]["qualityProfileId"])
+					ishow["airs"] = show["airDate"]
 					shows.append(ishow)
 				return shows
 
 
 		def searchTvShows(self, search):
-			url = self.rooturl + '/api/' + self.apikey + '/?cmd=sb.searchindexers&only_new=0&name=' + search
+			url = self.rooturl + '/api/series/lookup?apikey=' + self.apikey + '&term=' + search
 			request = requests.get(url)
 			json_data = json.loads(request.text)
-			if json_data["result"] !="success":
-				return False
-			elif json_data["result"] == "success":
-				if len(json_data["data"]["results"]) == 0:
-					return "Empty"
+			if len(json_data) < 1:
+				return "Empty"
+			else:
 				shows = []
-				for show in json_data["data"]["results"]:
+				for show in json_data:
 					ishow = {}
-					ishow["first_aired"] = show["first_aired"]
-					if show["in_show_list"] == True:
+					if "firstAired" in show:
+						ishow["first_aired"] = show["firstAired"]
+					else:
+						ishow["first_aired"] = "Unknown"
+					if show["seasonFolder"] == True:
 						ishow["in_show_list"] = "Yes"
 					else:
 						ishow["in_show_list"] = "No"
-					ishow["name"] = show["name"]
-					ishow["id"] = show["tvdbid"]
+					ishow["name"] = show["title"]
+					if "overview" in show:
+						ishow["overview"] = show["overview"]
+					else:
+						ishow["overview"] = "Missing"
+					ishow["id"] = show["tvdbId"]
 					shows.append(ishow)
 				return shows
 
 
 		def downloadTvShow(self, id):
-			url = self.rooturl + '/api/' + self.apikey + "?cmd=show.addnew&indexerid=268592&status=ignored&tvdbid=" + id
+			url = self.rooturl + '/api/series/lookup?apikey=' + self.apikey + '&term=tvdbid:' + id
 			request = requests.get(url)
 			json_data = json.loads(request.text)
-			if json_data["result"] !="success":
-				return json_data["message"]
-			elif json_data["result"] == "success":
-				return json_data["message"]
+			if len(json_data) < 1:
+				return "Failed to add Tv Show, is the ID valid?"
+			else:
+				postdata = {
+					"title" : json_data[0]["title"],
+					"tvdbId": json_data[0]["tvdbId"],
+					"ProfileId": "6",
+					"monitored": "true",
+					"rootFolderPath" : "/movies/",
+					"apiKey": self.apikey,
+					"titleSlug": json_data[0]["titleSlug"],
+					"images": json_data[0]["images"],
+					"seasons": json_data[0]["seasons"]
+					
+				}
+			url = self.rooturl + '/api/series?apikey=' + self.apikey
+			newHeaders = {'Content-type': 'application/json'}
+			bob = json.dumps(postdata)
+			request = requests.post(url, data=bob, headers=newHeaders)
+			json_data = json.loads(request.text)
+			print(request.text)
+			if request.status_code == 400:
+				return "Tv Show already in plex library"
+			else:
+				return "Tv Show added to library, any future episodes will be downloaded. For past episodes contact Steve"
+
 		
 
 

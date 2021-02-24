@@ -1,13 +1,12 @@
 import requests
 import json
 import urllib
-class couchPotato(object):
+class radarr(object):
 
 	def __init__(self, couchURL, apikey,whitelistedusers):
 		self.couchURL = couchURL
 		self.apiKey = apikey
 		self.users = whitelistedusers
-	
 	def begin(self,command,user):
 		# make the command lower for all functions
 		command = command.lower()
@@ -32,7 +31,7 @@ class couchPotato(object):
 
 
 	def doSearch(self,searchstr):
-		couch = couchPotatoAPI(self.couchURL, self.apiKey)
+		couch = radarrAPI(self.couchURL, self.apiKey)
 		if searchstr == "":
 			return "Invalid search string please specify a search term such as 'movies search iron man'"
 		searchList = couch.searchMovies(searchstr)
@@ -45,14 +44,14 @@ class couchPotato(object):
 		return message
 
 	def doDownload(self,id):
-		couch = couchPotatoAPI(self.couchURL, self.apiKey)
+		couch = radarrAPI(self.couchURL, self.apiKey)
 		if id == "":
 			return "Invalid ID"
 		movieDownload = couch.downloadMovie(id)
 		return movieDownload
 
 	def doWanted(self,id):
-		couch = couchPotatoAPI(self.couchURL, self.apiKey)
+		couch = radarrAPI(self.couchURL, self.apiKey)
 		movieWanted = couch.getWanted()
 		if movieWanted == False:
 			return "Error occurred"
@@ -61,76 +60,88 @@ class couchPotato(object):
 			message += "* " + movie["title"] + "(" + movie["year"] +")\n"
 		return message
 
-class couchPotatoAPI:
-
+class radarrAPI:
+	
 
 	def __init__(self, url, apikey):
 		self.rooturl = url
 		self.apikey = apikey
 
-
-
-
-
 	def printapi(self):
-		return self.apikey
-
-
+		 return self.apikey
 
 	def searchMovies(self,name):
-		url = self.rooturl + '/api/' + self.apikey + '/search?q=' + urllib.quote_plus(name)
+		url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=' + urllib.quote_plus(name)
 		request = requests.get(url)
 		json_data = json.loads(request.text)
-		if "movies" not in json_data:
+		if len(json_data) < 1:
 			return "Error"
-		movies = []
-		for movie in json_data["movies"]:
-			imovie = {}
-			# print "Movie Name: " + movie["titles"][0]
-			imovie["title"] = movie["titles"][0]
-			if movie["in_library"]:
-				#print "Already on Plex"
-				imovie["status"] = "On Plex already"
-			elif movie["in_wanted"]:
-				#print movie["in_wanted"]["status"]
-				imovie["status"] = "On Wanted List"
-			else :
-				imovie["status"] = "Can be Added"
-			if "imdb" in movie:
-				#print "ID: " + str(movie["imdb"])
-				imovie["imdb"] = movie["imdb"]
-			else:
-				imovie["imdb"] = "unknown"
-			if "year" in movie:
-				imovie["year"] = str(movie["year"])
-			else:
-				imovie["year"] = "0000"
-			movies.append(imovie)
-		return movies
-
-
-	def getWanted(self):
-		url = self.rooturl + '/api/' + self.apikey + '/media.list?type=movie&status=active'
-		request = requests.get(url)
-		json_data = json.loads(request.text)
-		if json_data["success"] == False:
-			return False
-		elif json_data["success"] == True:
+		else:
 			movies = []
-			for movie in json_data["movies"]:
+			for movie in json_data:
 				imovie = {}
+				# print "Movie Name: " + movie["titles"][0]
 				imovie["title"] = movie["title"]
-				imovie["year"] = str(movie["info"]["year"])
+				if movie["folderName"] != "":
+					#print "Already on Plex"
+					imovie["status"] = "On Plex already"
+				else :
+					imovie["status"] = "Can be Added"
+				if "imdbId" in movie:
+					#print "ID: " + str(movie["imdb"])
+					imovie["imdb"] = movie["imdbId"]
+				else:
+					imovie["imdb"] = "unknown"
+				if "year" in movie:
+					imovie["year"] = str(movie["year"])
+				else:
+					imovie["year"] = "0000"
 				movies.append(imovie)
 		return movies
 
 
-
-	def downloadMovie(self,id):
-		url = self.rooturl + '/api/' + self.apikey + '/movie.add/?identifier=' + urllib.quote_plus(id)
+	def getWanted(self):
+		url = self.rooturl + '/api/v3/calendar?apikey=' + self.apikey + "&unmonitored=false&start=2021-02-22&end=2030-01-01"
 		request = requests.get(url)
 		json_data = json.loads(request.text)
-		if json_data["success"] == False:
+		if len(json_data) < 1:
+			return False
+		else:
+			movies = []
+			for movie in json_data:
+				imovie = {}
+				imovie["title"] = movie["title"]
+				imovie["year"] = str(movie["year"])
+				movies.append(imovie)
+			return movies
+
+
+
+	def downloadMovie(self,id):
+		#url = self.rooturl + '/api/v3/movie/'+ urllib.quote_plus(id) + "?apikey=" + self.apikey
+		url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=imdb:' + id
+		request = requests.get(url)
+		json_data = json.loads(request.text)
+		#print(request.text)
+		if len(json_data) < 1:
 			return "Failed to download movie, is the ID valid?"
-		elif json_data["success"] == True:
-			return "Movie added to wanted list, it will be downloaded as soon as a release becomes avaliable"
+		else:
+			postdata = {
+				"title" : json_data[0]["title"],
+				"tmdbId": json_data[0]["tmdbId"],
+				"qualityProfileId": "6",
+				"monitored": "true",
+				"rootFolderPath" : "/movies/",
+				"apiKey": self.apikey,
+				"titleSlug": json_data[0]["titleSlug"],
+				"images": json_data[0]["images"]
+
+			}
+			url = self.rooturl + '/api/v3/movie?apikey=' + self.apikey
+			newHeaders = {'Content-type': 'application/json'}
+			bob = json.dumps(postdata)
+			request2 = requests.post(url, data=bob, headers=newHeaders)
+			if request2.status_code == 400:
+				return "Movie already in plex library or awaiting release"
+			else:
+				return "Movie added to wanted list, it will be downloaded as soon as a release becomes avaliable"
