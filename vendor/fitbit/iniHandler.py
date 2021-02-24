@@ -1,7 +1,8 @@
 #!/usr/bin/env python
-import sys
-import os
 import json
+import os
+import sys
+
 if (sys.version_info > (3,0)):
 	import configparser as ConfigParser
 else:

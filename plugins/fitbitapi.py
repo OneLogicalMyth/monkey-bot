@@ -1,6 +1,5 @@
-from vendor.fitbit import fitbit
 from vendor.fitbit import gather_keys_oauth2 as Oauth2
-from vendor.fitbit.fitbit.iniHandler import ReadCredentials,ReadTokens,WriteTokens, SaveTokens
+from vendor.fitbit.iniHandler import ReadCredentials,ReadTokens,WriteTokens, SaveTokens
 import datetime
 import requests
 
