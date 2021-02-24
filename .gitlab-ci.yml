@@ -11,6 +11,7 @@ flake8:
     name: python:3.7
   before_script:
   - python3 --version
+  - pip install psutil flake8 flake8-polyfill pylint pyparsing
   - pip install -r requirements.txt
   script:
   - flake8 --max-line-length=120 *.py
