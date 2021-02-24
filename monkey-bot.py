@@ -74,10 +74,8 @@ def handle_command(command, channel, user):
     )
     user_display_name = user_info["user"]["profile"]["display_name"]
 
-
     # debug
     print("The bot was mentioned in the channel '{}' by the user '{}' with the command of '{}'".format(channel, user, command.encode("utf-8")))
-
 
     # begin processing commands
     response, attachment_response = joke.joke().begin(command, user)
@@ -91,8 +89,8 @@ def handle_command(command, channel, user):
         response, attachment_response = portlookup.portlookup().start(command,rootpath)
 
     if command.startswith('fitness meps'):
-                z = myzone.myzone(config["myzone"]["username"], config["myzone"]["password"], config["myzone"]["nicknames"])
-                response = z.leaderboard()
+        z = myzone.myzone(config["myzone"]["username"], config["myzone"]["password"], config["myzone"]["nicknames"])
+        response = z.leaderboard()
 
     if command.startswith('fitness leaderboard'):
         obj_fitbit = fitbitapi.fitbitapi(config["FitBit"]["CLIENT_ID"], config["FitBit"]["CLIENT_SECRET"], config["AppleHealth"]["api_key"], config["AppleHealth"]["api_url"])
@@ -130,7 +128,7 @@ def handle_command(command, channel, user):
         response, attachment_response = stock.begin(command.encode("utf-8"),user)
 
     # ensure the help command is always last
-    if command.startswith('help') or response == None:
+    if command.startswith('help') or response is None:
         attachment_response = True
         response = bothelp.help().get_help(command)
 
@@ -155,10 +153,8 @@ def handle_command(command, channel, user):
         )
 
 
-
-
 if __name__ == "__main__":
-    if slack_client.rtm_connect(with_team_state=False,auto_reconnect=True):
+    if slack_client.rtm_connect(with_team_state=False, auto_reconnect=True):
         print("Monkey Bot connected and running!")
         # Read bot's user ID by calling Web API method `auth.test`
         bot_id = slack_client.api_call("auth.test")["user_id"]
