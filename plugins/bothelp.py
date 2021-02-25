@@ -79,7 +79,7 @@ class help(object):
                 },
                 {
                     "title": "Fitness MEPS",
-                    "value": "fitness meps"
+                    "value": "fitness meps",
                     "short": True
                 }
             ]
