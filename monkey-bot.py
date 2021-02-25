@@ -109,7 +109,7 @@ def handle_command(command, channel, user):
     elif "radarr" in config:
         if command.startswith('movie'):
             radarr = radarrBot.radarr(config["radarr"]["radarrURL"], config["radarr"]["radarrApi"], config["radarr"]["radarrFolder"], config["whitelistedusers"])
-            response = radarr.begin(command, user)
+            response, attachment_response = radarr.begin(command, user)
     if "sickRage" in config:
         if command.startswith('tv'):
             sickChill = sickPotatoBot.sickChill(config["sickRage"]["sickURL"], config["sickRage"]["sickApi"], config["whitelistedusers"])

@@ -28,10 +28,12 @@ class radarr(object):
             return self.doDownload(command.replace("movies download", ""))
         elif 'movies wanted' in command:
             return self.doWanted(command.replace("movies wanted", ""))
+        elif 'movie wanted' in command:
+            return self.doWanted(command.replace("movie wanted", ""))
         elif command[-1] == '?':
-            return "No."
+            return "No.", False
         else:
-            return "Invalid Command"
+            return "Invalid Command", False
 
     def doSearch(self, searchstr):
         couch = radarrAPI(self.couchURL, self.apiKey)
@@ -40,28 +42,46 @@ class radarr(object):
         searchList = couch.searchMovies(searchstr)
         if searchList == "Error":
             return "No results found for the specified search"
-        message = "I found the following movies:\n"
+        movielist = []
         for movie in searchList:
-            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"] + ")" + "> Status: " + movie["status"] + "   :id:" + movie["imdb"] + "\n"
-
-        return message
+            fields = []
+            fields.append(
+                {
+                    "short": False,
+                    "title": movie["title"],
+                    "value": "*Overview:* " + movie["overview"] + "\n*Year:* " + movie["year"] + "\n*Status:* " + movie["status"] + "\n*MovieID:* " + str(movie["imdb"])
+                }
+            )
+            movielist.append({"fallback": "blah", "fields": fields})
+            # message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"] + ")" + "> Status: " + movie["status"] + "   :id:" + movie["imdb"] + "\n"
+        message = movielist
+        return message, True
 
     def doDownload(self, id):
         couch = radarrAPI(self.couchURL, self.apiKey)
         if id == "":
             return "Invalid ID"
         movieDownload = couch.downloadMovie(id, self.folder)
-        return movieDownload
+        return movieDownload, False
 
     def doWanted(self, id):
         couch = radarrAPI(self.couchURL, self.apiKey)
         movieWanted = couch.getWanted()
         if movieWanted is False:
             return "Error occurred"
-        message = "*Current Movies in the watch list:*\n"
+        movielist = []
         for movie in movieWanted:
-            message += "* " + movie["title"] + "(" + movie["year"] + ")\n"
-        return message
+            fields = []
+            fields.append(
+                {
+                    "short": False,
+                    "title": movie["title"],
+                    "value": "*Year:* " + movie["year"]
+                }
+            )
+            movielist.append({"fallback": "blah", "fields": fields})
+            message = movielist
+        return message, True
 
 
 class radarrAPI:
@@ -74,7 +94,7 @@ class radarrAPI:
         return self.apikey
 
     def searchMovies(self, name):
-        url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=' + urllib.quote_plus(name)
+        url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=' + urllib.parse.quote_plus(name)
         request = requests.get(url)
         json_data = json.loads(request.text)
         if len(json_data) < 1:
@@ -99,6 +119,8 @@ class radarrAPI:
                     imovie["year"] = str(movie["year"])
                 else:
                     imovie["year"] = "0000"
+                if "overview" in movie:
+                    imovie["overview"] = movie["overview"]
                 movies.append(imovie)
         return movies
 
