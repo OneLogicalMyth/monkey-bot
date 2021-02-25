@@ -46,7 +46,7 @@ class help(object):
                 "fields": [
                         {
                             "title": "Help Topics",
-                            "value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\nplex\n\nYou can also do `help all`.",
+                            "value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\nplex\nstocks\n\nYou can also do `help all`.",
                             "short": True
                         }
                 ]
