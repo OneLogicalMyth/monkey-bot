@@ -24,20 +24,20 @@ def print_data(resource, data, goal):
 
 def fileExists(path, file):
     if os.path.isfile(path + file):
-        print_json("status", "%s exists" %file)
+        print_json("status", "%s exists" % file)
         return True
     else:
-        print_json("status", "%s does not exist" %file)
+        print_json("status", "%s does not exist" % file)
         return False
 
 
 def ReadCredentials():
     # Check if credentials.ini exists
     if not fileExists(iniDirectory, credentialsFile):
-        print_json('error', '%s does not exist' %credentialsFile)
+        print_json('error', '%s does not exist' % credentialsFile)
         sys.exit(1)
     # Reads app credentials from credentials.ini
-    print_json("status", "Reading from %s" %credentialsFile)
+    print_json("status", "Reading from %s" % credentialsFile)
     
     try:
         # Open file and read credentials
