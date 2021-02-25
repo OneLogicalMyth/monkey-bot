@@ -98,14 +98,14 @@ class help(object):
             "fallback": "You can try 'minecraft'",
             "title": "minecraft Commands",
             "text": "The following commands can be used.",
-                "fields": [
-                    {
-                        "title": "Server Lookup",
-                        "value": "minecraft",
-                        "short": True
-                    }
-                ]
-            }
+            "fields": [
+                {
+                    "title": "Server Lookup",
+                    "value": "minecraft",
+                    "short": True
+                }
+            ]
+        }
 
     def movies(self):
 
@@ -126,7 +126,6 @@ class help(object):
                 },
             ]
          }
-
 
     def tv(self):
 

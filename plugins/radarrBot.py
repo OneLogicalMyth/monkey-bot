@@ -87,7 +87,7 @@ class radarrAPI:
                 if movie["folderName"] != "":
                     # print "Already on Plex"
                     imovie["status"] = "On Plex already"
-                else :
+                else:
                     imovie["status"] = "Can be Added"
                 if "imdbId" in movie:
                     # print "ID: " + str(movie["imdb"])

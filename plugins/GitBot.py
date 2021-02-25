@@ -61,7 +61,7 @@ class GitAPI(object):
             "committer": {
                 "name": "Monkey Bot",
                 "email": "monkey@pentestmonkeys.tech"
-                },
+            },
             "content": base64.b64encode(newlinks),
             "sha": sha
         }

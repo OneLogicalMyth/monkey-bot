@@ -184,7 +184,7 @@ class sonarrAPI:
                 "tvdbId": json_data[0]["tvdbId"],
                 "ProfileId": "6",
                 "monitored": "true",
-                "rootFolderPath" : "/movies/",
+                "rootFolderPath": "/movies/",
                 "apiKey": self.apikey,
                 "titleSlug": json_data[0]["titleSlug"],
                 "images": json_data[0]["images"],
