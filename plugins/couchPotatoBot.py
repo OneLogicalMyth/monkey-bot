@@ -1,14 +1,16 @@
 import requests
 import json
 import urllib
+
+
 class couchPotato(object):
 
-    def __init__(self, couchURL, apikey,whitelistedusers):
+    def __init__(self, couchURL, apikey, whitelistedusers):
         self.couchURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
-    
-    def begin(self,command,user):
+
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None

@@ -28,8 +28,8 @@ class FitbitOauth2Client(object):
     refresh_token_url = request_token_url
 
     def __init__(self, client_id, client_secret, access_token=None,
-                refresh_token=None, expires_at=None, refresh_cb=None,
-                redirect_uri=None, *args, **kwargs):
+                 refresh_token=None, expires_at=None, refresh_cb=None,
+                 redirect_uri=None, *args, **kwargs):
         """
         Create a FitbitOauth2Client object. Specify the first 7 parameters if
         you have them to access user data. Specify just the first 2 parameters
@@ -209,8 +209,8 @@ class Fitbit(object):
     ]
 
     def __init__(self, client_id, client_secret, access_token=None,
-                refresh_token=None, expires_at=None, refresh_cb=None,
-                redirect_uri=None, system=US, **kwargs):
+                 refresh_token=None, expires_at=None, refresh_cb=None,
+                 redirect_uri=None, system=US, **kwargs):
         """
         Fitbit(<id>, <secret>, access_token=<token>, refresh_token=<token>)
         """
