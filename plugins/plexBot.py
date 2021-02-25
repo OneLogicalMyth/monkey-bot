@@ -49,11 +49,23 @@ class plex(object):
         for show in stats:
             fields = []
             if show["section_type"] == "show":
-                fields.append({"short": False, "title": show["section_name"], "value": "*Type:* " + show["section_type"] + "\n*Show Count:* " + show["count"] + "\n*Episode Count:* " + show["child_count"]})
+                fields.append({
+                    "short": False,
+                    "title": show["section_name"],
+                    "value": "*Type:* " + show["section_type"] + "\n*Show Count:* " + show["count"] + "\n*Episode Count:* " + show["child_count"]
+                    })
             elif show["section_type"] == "photo":
-                fields.append({"short": False, "title": show["section_name"], "value": "*Type:* " + show["section_type"] + "\n*Album Count:* " + show["count"] + "\n*Photo Count:* " + show["parent_count"]})
+                fields.append({
+                    "short": False,
+                    "title": show["section_name"],
+                    "value": "*Type:* " + show["section_type"] + "\n*Album Count:* " + show["count"] + "\n*Photo Count:* " + show["parent_count"]
+                    })
             else:
-                fields.append({"short": False, "title": show["section_name"], "value": "*Type:* " + show["section_type"] + "\n*Item Count:* " + show["count"] })
+                fields.append({
+                    "short": False,
+                    "title": show["section_name"],
+                    "value": "*Type:* " + show["section_type"] + "\n*Item Count:* " + show["count"]
+                    })
             showlist.append({"fallback": "blah", "fields": fields})
         # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist

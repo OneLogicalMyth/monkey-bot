@@ -44,6 +44,6 @@ class rtfm(object):
             findings.append({"short": False, "title": "Tags", "value": "{}".format(cmd[5])})
             findings.append({"short": False, "title": "References", "value": "{}".format(cmd[6])})
             findings.append({"short": False, "title": "--------------------------------------", "value": ""})
-            
+
         message2 = [{"fallback": "blah", "pretext": "The following RTFM entries were found:", "fields": findings}]
         return message2

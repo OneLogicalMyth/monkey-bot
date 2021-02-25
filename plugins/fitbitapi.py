@@ -43,19 +43,17 @@ class fitbitapi(object):
             for data in friends["data"]:
                 if data["relationships"]["user"]["data"]["id"] == friend["id"]:
                     if "attributes" in data:
-                        result=[friend["attributes"]["name"] + " (Fitbit)", data["attributes"]["step-summary"]]
+                        result = [friend["attributes"]["name"] + " (Fitbit)", data["attributes"]["step-summary"]]
                         results.append(result)
                     # Uncomment to add users with 0 steps on fitbit
                     # else:
-                        #result=[friend["attributes"]["name"] + " (Fitbit)", 0]
-                        #results.append(result)
-
-            
+                        # result=[friend["attributes"]["name"] + " (Fitbit)", 0]
+                        # results.append(result)
 
         # New Apple Health integration, requires a seperate IOS sync application and API endpoint (Code coming soon)
         apple_steve = self.getApple()
         for key, value in apple_steve.items():
-            combined = [key + " (iWatch)",round(float(value))]
+            combined = [key + " (iWatch)", round(float(value))]
             results.append(combined)
 
         results = sorted(results, reverse=True, key=self.getKey)

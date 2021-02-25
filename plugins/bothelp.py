@@ -35,9 +35,9 @@ class help(object):
                 "text": "The following help topics are available. Just do `help topic`.",
                 "fields": [
                         {
-                        "title": "Help Topics",
-                        "value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\nplex\n\nYou can also do `help all`.",
-                        "short": True
+                            "title": "Help Topics",
+                            "value": "fitness\nport\nrtfm\nminecraft\nmovies\ntv\nplex\n\nYou can also do `help all`.",
+                            "short": True
                         }
                 ]
             })
@@ -52,11 +52,11 @@ class help(object):
                 "text": "The following commands can be used.",
                 "fields": [
                         {
-                        "title": "Port Number Lookup",
-                        "value": "port ###\n\nWhere ### equals the port number.",
-                        "short": True
-                         }
-                ]
+                            "title": "Port Number Lookup",
+                            "value": "port ###\n\nWhere ### equals the port number.",
+                            "short": True
+                        }
+                    ]
                 }
 
     def fitness(self):

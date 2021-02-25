@@ -2,6 +2,7 @@ import requests
 import json
 import urllib
 
+
 class sickChill(object):
 
     def __init__(self, couchURL, apikey, whitelistedusers):

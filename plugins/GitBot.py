@@ -38,7 +38,7 @@ class GitAPI(object):
         self.session.auth = (username, password)
 
     def star_repo(self, url):
-        repoitems = url.replace('<','').replace('>','').split("/")[-2:]
+        repoitems = url.replace('<', '').replace('>', '').split("/")[-2:]
         print(self.githuburl + "/user/starred/" + repoitems[0] + "/" + repoitems[1])
         response = self.session.put(self.githuburl + "/user/starred/" + repoitems[0] + "/" + repoitems[1])
         if response.status_code == 204:
@@ -48,7 +48,7 @@ class GitAPI(object):
 
     def add_link(self, link):
         existinglinks, sha = self.get_file()
-        link = link.replace('<','').replace('>','')
+        link = link.replace('<', '').replace('>', '')
         if link in existinglinks:
             return "Link exists allready"
         else:
@@ -56,14 +56,15 @@ class GitAPI(object):
 
     def update_file(self, existinglinks, link, sha):
         newlinks = existinglinks + link + "\n"
-        update_payload = { "message": "New Link added", 
-                            "committer" : {
-                                "name" : "Monkey Bot",
-                                "email" : "monkey@pentestmonkeys.tech"
-                            }, 
-                            "content" : base64.b64encode(newlinks),
-                            "sha" : sha
-                            }
+        update_payload = { 
+                        "message": "New Link added",
+                        "committer" : {
+                            "name" : "Monkey Bot",
+                            "email" : "monkey@pentestmonkeys.tech"
+                        }, 
+                        "content" : base64.b64encode(newlinks),
+                        "sha" : sha
+                        }
         response = self.session.put(self.toolRepoURL, data=json.dumps(update_payload))
         if response.status_code == 200:
             return "Link Added successfully"
