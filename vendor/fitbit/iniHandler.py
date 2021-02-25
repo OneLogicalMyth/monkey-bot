@@ -14,19 +14,22 @@ tokenParser = ConfigParser.SafeConfigParser()
 
 
 def print_json(type, message, value=""):
-   sys.stdout.flush()
+    sys.stdout.flush()
+
 
 def print_data(resource, data, goal):
     # print(json.dumps({'type': 'data', 'resource': resource, 'values': {'data': data, 'goal': goal}}))
     sys.stdout.flush()
 
-def fileExists(path,file):
+
+def fileExists(path, file):
     if os.path.isfile(path + file):
-        print_json("status","%s exists" %file)
+        print_json("status", "%s exists" %file)
         return True
     else:
-        print_json("status","%s does not exist" %file)
+        print_json("status", "%s does not exist" %file)
         return False
+
 
 def ReadCredentials():
     # Check if credentials.ini exists
@@ -43,14 +46,15 @@ def ReadCredentials():
         client_secret = credentialParser.get('Credentials', 'C_SECRET')
     except ConfigParser.NoSectionError:
         # If the credentials file is not correctly formatted
-        print_json("error","Cannot read %s" %credentialsFile)
+        print_json("error", "Cannot read %s" %credentialsFile)
         sys.exit(1)
     else:
         # Return credentials
         print_json("status", "Read of %s successful." %credentialsFile)
         return client_id, client_secret
     
-def WriteCredentials(id,secret):
+
+def WriteCredentials(id, secret):
     # Check if credentials.ini exists
     if not fileExists(iniDirectory, credentialsFile):
         print_json('error', '%s does not exist' %credentialsFile)
@@ -76,7 +80,8 @@ def WriteCredentials(id,secret):
         WriteCredentials(id,secret)
     else:
         print_json("status", "Credentials write successful")
-        
+
+
 def ReadTokens():
     # Check if tokens.ini exists
     if not fileExists(iniDirectory, tokensFile):
@@ -98,10 +103,13 @@ def ReadTokens():
         # Return tokens
         print_json("status", "Read of %s successful." %tokensFile)
         return AccToken, RefToken
+
+
 def SaveTokens(test):
     WriteTokens(test["access_token"],test["refresh_token"])
 
-def WriteTokens(AccToken,RefToken):
+
+def WriteTokens(AccToken, RefToken):
     # Check if tokens.ini exists
     if not fileExists(iniDirectory, tokensFile):
         print_json('error', '%s does not exist' %tokensFile)
@@ -127,6 +135,7 @@ def WriteTokens(AccToken,RefToken):
         WriteTokens(AccToken,RefToken)
     else:
         print_json("status", "Write of %s successful." %tokensFile)
+
 
 if __name__ == "__main__":
     WriteCredentials(sys.argv[1],sys.argv[2])
