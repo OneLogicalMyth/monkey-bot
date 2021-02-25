@@ -1,5 +1,20 @@
 stages:
+ - Static Analysis
  - build
+
+
+
+flake8:
+  stage: Static Analysis
+  tags: ["dev"]
+  image: 
+    name: python:3.7
+  before_script:
+  - python3 --version
+  - pip install psutil flake8 flake8-polyfill pylint pyparsing
+  - pip install -r requirements.txt
+  script:
+  - flake8 --max-line-length=400 --ignore=F403,F841,F405,F401,E731
 
 build:
   stage: build
@@ -16,3 +31,5 @@ build:
     - docker tag $CI_REGISTRY/$CI_PROJECT_PATH:latest $CI_REGISTRY/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH:latest
     - docker push $CI_REGISTRY/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA
+
+

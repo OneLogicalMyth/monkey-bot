@@ -20,7 +20,7 @@ from .utils import curry
 class FitbitOauth2Client(object):
     API_ENDPOINT = "https://api.fitbit.com"
     AUTHORIZE_ENDPOINT = "https://www.fitbit.com"
-    API_VERSION = 1
+    API_VERSION = 1.1
 
     request_token_url = "%s/oauth2/token" % API_ENDPOINT
     authorization_url = "%s/oauth2/authorize" % AUTHORIZE_ENDPOINT
@@ -28,8 +28,8 @@ class FitbitOauth2Client(object):
     refresh_token_url = request_token_url
 
     def __init__(self, client_id, client_secret, access_token=None,
-            refresh_token=None, expires_at=None, refresh_cb=None,
-            redirect_uri=None, *args, **kwargs):
+                 refresh_token=None, expires_at=None, refresh_cb=None,
+                 redirect_uri=None, *args, **kwargs):
         """
         Create a FitbitOauth2Client object. Specify the first 7 parameters if
         you have them to access user data. Specify just the first 2 parameters
@@ -209,8 +209,8 @@ class Fitbit(object):
     ]
 
     def __init__(self, client_id, client_secret, access_token=None,
-            refresh_token=None, expires_at=None, refresh_cb=None,
-            redirect_uri=None, system=US, **kwargs):
+                 refresh_token=None, expires_at=None, refresh_cb=None,
+                 redirect_uri=None, system=US, **kwargs):
         """
         Fitbit(<id>, <secret>, access_token=<token>, refresh_token=<token>)
         """
@@ -533,7 +533,7 @@ class Fitbit(object):
         if end_date:
             end = self._get_date_string(end_date)
         else:
-            if not period in Fitbit.PERIODS:
+            if period not in Fitbit.PERIODS:
                 raise ValueError("Period must be one of %s"
                                  % ','.join(Fitbit.PERIODS))
             end = period
@@ -568,7 +568,7 @@ class Fitbit(object):
         the detail-level is now (OAuth 2.0 ):
         either "1min" or "15min" (optional). "1sec" for heart rate.
         """
-        if not detail_level in ['1sec', '1min', '15min']:
+        if detail_level not in ['1sec', '1min', '15min']:
             raise ValueError("Period must be either '1sec', '1min', or '15min'")
 
         url = "{0}/{1}/user/-/{resource}/date/{base_date}/1d/{detail_level}".format(
@@ -699,7 +699,7 @@ class Fitbit(object):
 
     def get_devices(self):
         """
-		https://dev.fitbit.com/docs/devices/#get-devices
+        https://dev.fitbit.com/docs/devices/#get-devices
         """
         url = "{0}/{1}/user/-/devices.json".format(*self._get_common_args())
         return self.make_request(url)
@@ -900,7 +900,7 @@ class Fitbit(object):
         kwargs = {'type_': type_}
         base_url = "{0}/{1}/user/{2}/body/log/{type_}/date/{date_string}.json"
         if period:
-            if not period in Fitbit.PERIODS:
+            if period not in Fitbit.PERIODS:
                 raise ValueError("Period must be one of %s" %
                                  ','.join(Fitbit.PERIODS))
             kwargs['date_string'] = '/'.join([base_date_string, period])
@@ -924,18 +924,17 @@ class Fitbit(object):
         """
         https://dev.fitbit.com/docs/friends/#get-friends-leaderboard
         """
-        if not period in ['7d', '30d']:
+        if period not in ['7d', '30d']:
             raise ValueError("Period must be one of '7d', '30d'")
         url = "{0}/1.1/user/-/leaderboard/friends.json".format(
-            *self._get_common_args() )
+            *self._get_common_args())
         return self.make_request(url)
-
 
     def get_friends_leaderboard(self, period):
         """
         https://dev.fitbit.com/docs/friends/#get-friends-leaderboard
         """
-        if not period in ['7d', '30d']:
+        if period not in ['7d', '30d']:
             raise ValueError("Period must be one of '7d', '30d'")
         url = "{0}/{1}/user/-/friends/leaders/{period}.json".format(
             *self._get_common_args(),

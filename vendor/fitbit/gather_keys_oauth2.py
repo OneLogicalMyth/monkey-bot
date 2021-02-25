@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 import cherrypy
-import os
 import sys
 import threading
 import traceback
 import webbrowser
 
-from base64 import b64encode
-from fitbit.api import Fitbit
+from vendor.fitbit.api import Fitbit
 from oauthlib.oauth2.rfc6749.errors import MismatchingStateError, MissingTokenError
 
 
