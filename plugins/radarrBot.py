@@ -41,7 +41,7 @@ class radarr(object):
             return "No results found for the specified search"
         message = "I found the following movies:\n"
         for movie in searchList:
-            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"] + "   :id:" + movie["imdb"] + "\n"
+            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"] + ")" + "> Status: " + movie["status"] + "   :id:" + movie["imdb"] + "\n"
 
         return message
 
@@ -59,17 +59,18 @@ class radarr(object):
             return "Error occurred"
         message = "*Current Movies in the watch list:*\n"
         for movie in movieWanted:
-            message += "* " + movie["title"] + "(" + movie["year"] +")\n"
+            message += "* " + movie["title"] + "(" + movie["year"] + ")\n"
         return message
 
+
 class radarrAPI:
-    
+
     def __init__(self, url, apikey):
         self.rooturl = url
         self.apikey = apikey
 
     def printapi(self):
-         return self.apikey
+        return self.apikey
 
     def searchMovies(self, name):
         url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=' + urllib.quote_plus(name)
@@ -84,12 +85,12 @@ class radarrAPI:
                 # print "Movie Name: " + movie["titles"][0]
                 imovie["title"] = movie["title"]
                 if movie["folderName"] != "":
-                    #print "Already on Plex"
+                    # print "Already on Plex"
                     imovie["status"] = "On Plex already"
                 else :
                     imovie["status"] = "Can be Added"
                 if "imdbId" in movie:
-                    #print "ID: " + str(movie["imdb"])
+                    # print "ID: " + str(movie["imdb"])
                     imovie["imdb"] = movie["imdbId"]
                 else:
                     imovie["imdb"] = "unknown"
@@ -116,20 +117,20 @@ class radarrAPI:
             return movies
 
     def downloadMovie(self, id):
-        #url = self.rooturl + '/api/v3/movie/'+ urllib.quote_plus(id) + "?apikey=" + self.apikey
+        # url = self.rooturl + '/api/v3/movie/'+ urllib.quote_plus(id) + "?apikey=" + self.apikey
         url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=imdb:' + id
         request = requests.get(url)
         json_data = json.loads(request.text)
-        #print(request.text)
+        # print(request.text)
         if len(json_data) < 1:
             return "Failed to download movie, is the ID valid?"
         else:
             postdata = {
-                "title" : json_data[0]["title"],
+                "title": json_data[0]["title"],
                 "tmdbId": json_data[0]["tmdbId"],
                 "qualityProfileId": "6",
                 "monitored": "true",
-                "rootFolderPath" : "/movies/",
+                "rootFolderPath": "/movies/",
                 "apiKey": self.apikey,
                 "titleSlug": json_data[0]["titleSlug"],
                 "images": json_data[0]["images"]

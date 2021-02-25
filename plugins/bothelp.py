@@ -79,33 +79,33 @@ class help(object):
 
     def rtfm(self):
 
-            return {
-                "fallback": "You can try 'rtfm rdp'",
-                "title": "rtfm Commands",
-                "text": "The following commands can be used.",
+        return {
+            "fallback": "You can try 'rtfm rdp'",
+            "title": "rtfm Commands",
+            "text": "The following commands can be used.",
+            "fields": [
+                {
+                    "title": "RTFM Lookup",
+                    "value": "rtfm value",
+                    "short": True
+                }
+            ]
+        }
+
+    def minecraft(self):
+
+        return {
+            "fallback": "You can try 'minecraft'",
+            "title": "minecraft Commands",
+            "text": "The following commands can be used.",
                 "fields": [
                     {
-                        "title": "RTFM Lookup",
-                        "value": "rtfm value",
+                        "title": "Server Lookup",
+                        "value": "minecraft",
                         "short": True
                     }
                 ]
             }
-
-    def minecraft(self):
-
-            return {
-                "fallback": "You can try 'minecraft'",
-                "title": "minecraft Commands",
-                "text": "The following commands can be used.",
-                    "fields": [
-                        {
-                            "title": "Server Lookup",
-                            "value": "minecraft",
-                            "short": True
-                        }
-                    ]
-                }
 
     def movies(self):
 
@@ -149,7 +149,7 @@ class help(object):
                     "title": "TV Search",
                     "value": "tv search",
                     "short": True
-                    },
+                },
             ]
         }
 
@@ -177,5 +177,3 @@ class help(object):
                 },
             ]
         }
-
-

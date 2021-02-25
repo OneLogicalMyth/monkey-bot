@@ -49,10 +49,11 @@ class sonarr(object):
         showlist = []
         for show in tvshows:
             fields = []
-            fields.append({
-                "short": False,
-                "title": show["name"],
-                "value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])
+            fields.append(
+                {
+                    "short": False,
+                    "title": show["name"],
+                    "value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])
                 }
             )
             showlist.append({"fallback": "blah", "fields": fields})
@@ -68,10 +69,11 @@ class sonarr(object):
         showlist = []
         for show in tvtoday:
             fields = []
-            fields.append({
-                "short": False,
-                "title": show["showname"],
-                "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]
+            fields.append(
+                {
+                    "short": False,
+                    "title": show["showname"],
+                    "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]
                 }
             )
             showlist.append({"fallback": "blah", "fields": fields})

@@ -167,9 +167,3 @@ class sickChillAPI:
             return json_data["message"]
         elif json_data["result"] == "success":
             return json_data["message"]
-        
-
-
-
-
-
