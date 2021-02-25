@@ -5,10 +5,11 @@ import urllib
 
 class sonarr(object):
 
-    def __init__(self, couchURL, apikey, whitelistedusers):
+    def __init__(self, couchURL, apikey, folder, whitelistedusers):
         self.sickURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
+        self.folder = folder
 
     def begin(self, command, user):
         # make the command lower for all functions
@@ -32,7 +33,7 @@ class sonarr(object):
 
     def getDownload(self, searchstr):
         sick = sonarrAPI(self.sickURL, self.apiKey)
-        download = sick.downloadTvShow(searchstr)
+        download = sick.downloadTvShow(searchstr, self.folder)
         if download == "An existing indexerid already exists in database":
             return "Tv Show allready added", False
         elif "could not be parsed into" in download:
@@ -172,7 +173,7 @@ class sonarrAPI:
                 shows.append(ishow)
             return shows
 
-    def downloadTvShow(self, id):
+    def downloadTvShow(self, id, folder):
         url = self.rooturl + '/api/series/lookup?apikey=' + self.apikey + '&term=tvdbid:' + id
         request = requests.get(url)
         json_data = json.loads(request.text)
@@ -184,7 +185,7 @@ class sonarrAPI:
                 "tvdbId": json_data[0]["tvdbId"],
                 "ProfileId": "6",
                 "monitored": "true",
-                "rootFolderPath": "/movies/",
+                "rootFolderPath": folder,
                 "apiKey": self.apikey,
                 "titleSlug": json_data[0]["titleSlug"],
                 "images": json_data[0]["images"],

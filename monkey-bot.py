@@ -108,7 +108,7 @@ def handle_command(command, channel, user):
             response = couchPot.begin(command, user)
     elif "radarr" in config:
         if command.startswith('movie'):
-            radarr = radarrBot.radarr(config["radarr"]["radarrURL"], config["radarr"]["radarrApi"], config["whitelistedusers"])
+            radarr = radarrBot.radarr(config["radarr"]["radarrURL"], config["radarr"]["radarrApi"], config["radarr"]["radarrFolder"], config["whitelistedusers"])
             response = radarr.begin(command, user)
     if "sickRage" in config:
         if command.startswith('tv'):
@@ -116,7 +116,7 @@ def handle_command(command, channel, user):
             response, attachment_response = sickChill.begin(command, user)
     elif "sonarr" in config:
         if command.startswith('tv'):
-            sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"], config["sonarr"]["sonarrApi"], config["whitelistedusers"])
+            sonarr = sonarrBot.sonarr(config["sonarr"]["sonarrURL"], config["sonarr"]["sonarrApi"], config["sonarr"]["sonarrFolder"], config["whitelistedusers"])
             response, attachment_response = sonarr.begin(command, user)
 
     if command.startswith('plex'):

@@ -5,10 +5,11 @@ import urllib
 
 class radarr(object):
 
-    def __init__(self, couchURL, apikey, whitelistedusers):
+    def __init__(self, couchURL, apikey, folder, whitelistedusers):
         self.couchURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
+        self.folder = folder
 
     def begin(self, command, user):
         # make the command lower for all functions
@@ -49,7 +50,7 @@ class radarr(object):
         couch = radarrAPI(self.couchURL, self.apiKey)
         if id == "":
             return "Invalid ID"
-        movieDownload = couch.downloadMovie(id)
+        movieDownload = couch.downloadMovie(id, self.folder)
         return movieDownload
 
     def doWanted(self, id):
@@ -116,7 +117,7 @@ class radarrAPI:
                 movies.append(imovie)
             return movies
 
-    def downloadMovie(self, id):
+    def downloadMovie(self, id, folder):
         # url = self.rooturl + '/api/v3/movie/'+ urllib.quote_plus(id) + "?apikey=" + self.apikey
         url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=imdb:' + id
         request = requests.get(url)
@@ -130,7 +131,7 @@ class radarrAPI:
                 "tmdbId": json_data[0]["tmdbId"],
                 "qualityProfileId": "6",
                 "monitored": "true",
-                "rootFolderPath": "/movies/",
+                "rootFolderPath": folder,
                 "apiKey": self.apikey,
                 "titleSlug": json_data[0]["titleSlug"],
                 "images": json_data[0]["images"]
