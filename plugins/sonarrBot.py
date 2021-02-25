@@ -2,14 +2,15 @@ import requests
 import json
 import urllib
 
+
 class sonarr(object):
     
-    def __init__(self, couchURL, apikey,whitelistedusers):
+    def __init__(self, couchURL, apikey, whitelistedusers):
         self.sickURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
     
-    def begin(self,command,user):
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None
@@ -92,10 +93,7 @@ class sonarr(object):
         return message, True
 
 
-
-
 class sonarrAPI:
-
 
         def __init__(self, url, apikey):
             self.rooturl = url

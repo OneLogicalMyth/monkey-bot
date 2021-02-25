@@ -24,16 +24,15 @@ class couchPotato(object):
         elif 'movie download' in command:
             return self.doDownload(command.replace("movie download", ""))
         elif 'movies download' in command:
-                        return self.doDownload(command.replace("movies download", ""))
+            return self.doDownload(command.replace("movies download", ""))
         elif 'movies wanted' in command:
             return self.doWanted(command.replace("movies wanted", ""))
         elif command[-1] == '?':
             return "No."
         else:
-            return "Invalid Command"	
+            return "Invalid Command"
 
-
-    def doSearch(self,searchstr):
+    def doSearch(self, searchstr):
         couch = couchPotatoAPI(self.couchURL, self.apiKey)
         if searchstr == "":
             return "Invalid search string please specify a search term such as 'movies search iron man'"
@@ -42,44 +41,38 @@ class couchPotato(object):
             return "No results found for the specified search"
         message = "I found the following movies:\n"
         for movie in searchList:
-            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
+            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  + ")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
 
         return message
 
-    def doDownload(self,id):
+    def doDownload(self, id):
         couch = couchPotatoAPI(self.couchURL, self.apiKey)
         if id == "":
             return "Invalid ID"
         movieDownload = couch.downloadMovie(id)
         return movieDownload
 
-    def doWanted(self,id):
+    def doWanted(self, id):
         couch = couchPotatoAPI(self.couchURL, self.apiKey)
         movieWanted = couch.getWanted()
-        if movieWanted == False:
+        if movieWanted is False:
             return "Error occurred"
         message = "*Current Movies in the watch list:*\n"
         for movie in movieWanted:
-            message += "* " + movie["title"] + "(" + movie["year"] +")\n"
+            message += "* " + movie["title"] + "(" + movie["year"] + ")\n"
         return message
 
-class couchPotatoAPI:
 
+class couchPotatoAPI:
 
     def __init__(self, url, apikey):
         self.rooturl = url
         self.apikey = apikey
 
-
-
-
-
     def printapi(self):
         return self.apikey
 
-
-
-    def searchMovies(self,name):
+    def searchMovies(self, name):
         url = self.rooturl + '/api/' + self.apikey + '/search?q=' + urllib.quote_plus(name)
         request = requests.get(url)
         json_data = json.loads(request.text)
@@ -110,7 +103,6 @@ class couchPotatoAPI:
             movies.append(imovie)
         return movies
 
-
     def getWanted(self):
         url = self.rooturl + '/api/' + self.apikey + '/media.list?type=movie&status=active'
         request = requests.get(url)
@@ -126,9 +118,7 @@ class couchPotatoAPI:
                 movies.append(imovie)
         return movies
 
-
-
-    def downloadMovie(self,id):
+    def downloadMovie(self, id):
         url = self.rooturl + '/api/' + self.apikey + '/movie.add/?identifier=' + urllib.quote_plus(id)
         request = requests.get(url)
         json_data = json.loads(request.text)

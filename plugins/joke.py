@@ -2,9 +2,10 @@ import requests
 import json
 import time
 
+
 class joke(object):
 
-    def begin(self,command,user):
+    def begin(self, command, user):
 
         response = None
         attachment = False
@@ -20,7 +21,7 @@ class joke(object):
 
         if command == 'hack the planet':
             attachment = True
-            response = [{"text": ":stuck_out_tongue_closed_eyes:","image_url": "https://media.giphy.com/media/14kdiJUblbWBXy/giphy.gif"}]
+            response = [{"text": ":stuck_out_tongue_closed_eyes:", "image_url": "https://media.giphy.com/media/14kdiJUblbWBXy/giphy.gif"}]
 
         if command == 'dad joke':
             res = requests.get("http://icanhazdadjoke.com", headers={"Accept":"application/json"})
@@ -32,7 +33,7 @@ class joke(object):
             res = requests.get("https://api.icndb.com/jokes/random", headers={"Accept":"application/json"})
             data = res.json()
             if data:
-                response = data["value"]["joke"].replace('&quot;','"')
+                response = data["value"]["joke"].replace('&quot;', '"')
 
         if command == 'trump':
                 res = requests.get("https://api.tronalddump.io/random/quote", headers={"Accept":"application/hal+json"})

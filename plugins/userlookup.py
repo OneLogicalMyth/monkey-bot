@@ -1,10 +1,12 @@
-import requests, json
+import json
+import requests
+
 
 class userlookup(object):
 
-    def get(self,token):
+    def get(self, ntoken):
 
-        out = requests.get('https://slack.com/api/users.list',params=token)
+        out = requests.get('https://slack.com/api/users.list', params=token)
         final = out.json()
         userlookup = {}
 

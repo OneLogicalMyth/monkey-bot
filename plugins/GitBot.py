@@ -3,8 +3,9 @@ import base64
 import json
 import hashlib
 
+
 class GitBot(object):
-    def __init__(self, gitURL, username,password, toolRepoURL):
+    def __init__(self, gitURL, username, password, toolRepoURL):
         self.gitURL = gitURL
         self.toolRepoURL = toolRepoURL
         self.username = username
@@ -16,10 +17,10 @@ class GitBot(object):
         response = None
         needs_help = False
         if 'github.com' in command:
-            gitapi = GitAPI(self.gitURL,self.username,self.password, self.toolRepoURL)
+            gitapi = GitAPI(self.gitURL, self.username, self.password, self.toolRepoURL)
             return gitapi.star_repo(command)
         elif 'http' in command:
-            gitapi = GitAPI(self.gitURL,self.username,self.password, self.toolRepoURL)
+            gitapi = GitAPI(self.gitURL, self.username, self.password, self.toolRepoURL)
             return gitapi.add_link(command)
         elif command[-1] == '?':
             return "No."
@@ -39,8 +40,7 @@ class GitAPI(object):
         self.session = requests.session()
         self.session.auth = (username, password)
 
-
-    def star_repo(self,url):
+    def star_repo(self, url):
         repoitems = url.replace('<','').replace('>','').split("/")[-2:]
         print(self.githuburl + "/user/starred/" + repoitems[0] + "/" + repoitems[1])
         response = self.session.put(self.githuburl + "/user/starred/" + repoitems[0] + "/" + repoitems[1])
@@ -48,7 +48,6 @@ class GitAPI(object):
             return "Repo has been sucessfully starred"
         else:
             return "Repo Private or Not Found"
-
 
     def add_link(self, link):
         existinglinks, sha = self.get_file()
@@ -73,7 +72,6 @@ class GitAPI(object):
             return "Link Added successfully"
         else:
             return "An error occured :("
-
 
     def get_file(self):
         response = self.session.get(self.toolRepoURL)

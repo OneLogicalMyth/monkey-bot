@@ -97,7 +97,7 @@ def ReadTokens():
         RefToken = tokenParser.get('Tokens', 'REF_TOK')
     except ConfigParser.NoSectionError:
         # If the token file is not correctly formatted
-        print_json("error","Cannot read %s" % tokensFile)
+        print_json("error", "Cannot read %s" % tokensFile)
         # sys.exit(1)
     else:
         # Return tokens
@@ -114,7 +114,7 @@ def WriteTokens(AccToken, RefToken):
     if not fileExists(iniDirectory, tokensFile):
         print_json('error', '%s does not exist' % tokensFile)
         sys.exit(1)
-    
+
     print_json("status", "Writing tokens to %s" % tokensFile)
     print_json("status", "Writing access token: %s and refresh token: %s" % (AccToken, RefToken))
 

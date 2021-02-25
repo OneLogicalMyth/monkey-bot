@@ -1,22 +1,22 @@
-import requests
 import json
+import requests
 import urllib
 
 
 class plex(object):
-    
-    def __init__(self, plexURL, apikey,whitelistedusers):
+
+    def __init__(self, plexURL, apikey, whitelistedusers):
         self.plexURL = plexURL
         self.apiKey = apikey
         self.users = whitelistedusers
-        
-    def begin(self,command,user):
+
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None
         needs_help = False
-        #if user not in self.users:
-            #return "This function is currently only avaliable to contributors to say thanks"
+        # if user not in self.users:
+        # return "This function is currently only avaliable to contributors to say thanks"
         if 'plex watching' in command:
             return self.getWatching()
         elif 'plex popular' in command:
@@ -28,15 +28,15 @@ class plex(object):
         else:
             return "Invalid Command"
 
-
     def getWatching(self):
         plex = plexAPI(self.plexURL, self.apiKey)
         tvtoday = plex.Watching()
         showlist = []
         for show in tvtoday:
             fields = []
-            #Removed user integration due to emails being shown fields.append({"short": False, "title": show["showname"] , "value": "*Library:* " + show["type"] + "\n*User:* " + show["user"] + "\n*Current Quality*: " + show["quality_profile"] })
-            fields.append({"short": False, "title": show["showname"] , "value": "*Library:* " + show["type"] + "\n*Current Quality*: " + show["quality_profile"] })
+            # Removed user integration due to emails being shown 
+            # fields.append({"short": False, "title": show["showname"] , "value": "*Library:* " + show["type"] + "\n*User:* " + show["user"] + "\n*Current Quality*: " + show["quality_profile"] })
+            fields.append({"short": False, "title": show["showname"] , "value": "*Library:* " + show["type"] + "\n*Current Quality*: " + show["quality_profile"]})
             showlist.append({"fallback": "blah", "fields": fields})
         #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
@@ -49,9 +49,9 @@ class plex(object):
         for show in stats:
             fields = []
             if show["section_type"] == "show":
-                fields.append({"short": False, "title": show["section_name"] , "value": "*Type:* " + show["section_type"] + "\n*Show Count:* " + show["count"] + "\n*Episode Count:* " + show["child_count"] })
+                fields.append({"short": False, "title": show["section_name"] , "value": "*Type:* " + show["section_type"] + "\n*Show Count:* " + show["count"] + "\n*Episode Count:* " + show["child_count"]})
             elif show["section_type"] == "photo":
-                fields.append({"short": False, "title": show["section_name"] , "value": "*Type:* " + show["section_type"] + "\n*Album Count:* " + show["count"] + "\n*Photo Count:* " + show["parent_count"] })
+                fields.append({"short": False, "title": show["section_name"] , "value": "*Type:* " + show["section_type"] + "\n*Album Count:* " + show["count"] + "\n*Photo Count:* " + show["parent_count"]})
             else:
                 fields.append({"short": False, "title": show["section_name"] , "value": "*Type:* " + show["section_type"] + "\n*Item Count:* " + show["count"] })
             showlist.append({"fallback": "blah", "fields": fields})
@@ -82,7 +82,6 @@ class plexAPI:
     def __init__(self, url, apikey):
         self.rooturl = url
         self.apikey = apikey
-
 
     def Watching(self):
         url = self.rooturl + '/api/v2?apikey=' + self.apikey + '&cmd=get_activity'
