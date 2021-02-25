@@ -34,7 +34,7 @@ class help(object):
 
         if command.startswith('help plex'):
             attachments.append(self.plex())
-        
+
         if command.startswith("help stocks"):
             attachments.append(self.stockks())
 
