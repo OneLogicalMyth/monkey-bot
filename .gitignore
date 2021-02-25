@@ -1,3 +1,4 @@
 *.pyc
 passwords.txt
 test.py
+vendor/fitbit/tokens.ini
