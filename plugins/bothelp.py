@@ -18,6 +18,12 @@ class help(object):
 
         if command.startswith('help all'):
             attachments.append(self.fitness())
+            attachments.append(self.rtfm())
+            attachments.append(self.minecraft())
+            attachments.append(self.port())
+            attachments.append(self.movies())
+            attachments.append(self.tv())
+            attachments.append(self.plex())
 
         if command.startswith('help movies'):
             attachments.append(self.movies())
@@ -72,7 +78,9 @@ class help(object):
                     "short": True
                 },
                 {
-                    "title": "Fitness MEPS"
+                    "title": "Fitness MEPS",
+                    "value": "fitness meps"
+                    "short": True
                 }
             ]
         }
@@ -124,6 +132,11 @@ class help(object):
                     "value": "movies download id",
                     "short": True
                 },
+                {
+                    "title": "Movie Wanted",
+                    "value": "movies wanted",
+                    "short": True
+                },
             ]
         }
 
@@ -131,7 +144,7 @@ class help(object):
 
         return {
             "fallback": "You can try 'tv'",
-            "title": "tv Commands",
+            "title": "TV Commands",
             "text": "The following commands can be used.",
             "fields": [
                 {
