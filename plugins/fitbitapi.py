@@ -1,5 +1,6 @@
 from vendor.fitbit import gather_keys_oauth2 as Oauth2
 from vendor.fitbit.iniHandler import ReadCredentials,ReadTokens,WriteTokens, SaveTokens
+from vendor import fitbit
 import datetime
 import requests
 
@@ -53,7 +54,7 @@ class fitbitapi(object):
 
 		#New Apple Health integration, requires a seperate IOS sync application and API endpoint (Code coming soon)
 		apple_steve = self.getApple()
-		for key, value in apple_steve.iteritems():
+		for key, value in apple_steve.items():
 			combined = [key + " (iWatch)",round(float(value))]
 			results.append(combined)
 

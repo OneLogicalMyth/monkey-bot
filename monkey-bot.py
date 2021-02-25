@@ -165,7 +165,7 @@ if __name__ == "__main__":
                     handle_command(command, channel, user)
             except Exception as e:
                 print(traceback.format_exc())
-                print("ERROR: The command '" + str(command).encode("utf-8") + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'")
+                print("ERROR: The command '" + str(command) + "' was sent by '" + str(user) + "' but failed, exception is '" + str(e) + "'")
             time.sleep(RTM_READ_DELAY)
     else:
         print("Connection failed. Exception traceback printed above.")
