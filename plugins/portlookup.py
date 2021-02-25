@@ -50,4 +50,3 @@ class portlookup(object):
                         ]
 
         return message, attachment
-

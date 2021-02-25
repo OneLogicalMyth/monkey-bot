@@ -125,7 +125,7 @@ class help(object):
                     "short": True
                 },
             ]
-         }
+        }
 
     def tv(self):
 
