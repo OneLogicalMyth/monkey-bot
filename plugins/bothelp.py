@@ -24,6 +24,7 @@ class help(object):
             attachments.append(self.movies())
             attachments.append(self.tv())
             attachments.append(self.plex())
+            attachments.append(self.stocks())
 
         if command.startswith('help movies'):
             attachments.append(self.movies())
@@ -33,6 +34,9 @@ class help(object):
 
         if command.startswith('help plex'):
             attachments.append(self.plex())
+        
+        if command.startswith("help stocks"):
+            attachments.append(self.stockks())
 
         if command == 'help' or len(attachments) == 0:
             attachments.append({
@@ -187,5 +191,20 @@ class help(object):
                     "value": "plex library",
                     "short": True
                 },
+            ]
+        }
+
+    def stocks(self):
+
+        return {
+            "fallback": "You can try 'stocks'",
+            "title": "Stock Commands",
+            "text": "The following commands can be used.",
+            "fields": [
+                {
+                    "title": "Stock News",
+                    "value": "stocks news",
+                    "short": True
+                }
             ]
         }

@@ -121,11 +121,11 @@ def handle_command(command, channel, user):
 
     if command.startswith('plex'):
         plex = plexBot.plex(config["plex"]["plexURL"], config["plex"]["plexApi"], config["whitelistedusers"])
-        response, attachment_response = plex.begin(command.encode("utf-8"), user)
+        response, attachment_response = plex.begin(command, user)
 
     if command.startswith('stocks'):
         stock = stockBot.stocks(config["Stocks"]["stockURL"], config["Stocks"]["stockApi"])
-        response, attachment_response = stock.begin(command.encode("utf-8"), user)
+        response, attachment_response = stock.begin(command, user)
 
     # ensure the help command is always last
     if command.startswith('help') or response is None:

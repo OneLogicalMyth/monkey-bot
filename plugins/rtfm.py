@@ -1,3 +1,4 @@
+import os
 import sqlite3
 
 
@@ -5,7 +6,8 @@ class rtfm(object):
     def lookup(self, command, rootPath):
         message = 'Sorry I do not understand what your trying to search.'
         attachment = False
-        rootPath = "/opt/monkey-bot"
+        rootPath = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # rootPath = ""
 
         if command.startswith('rtfm'):
             sqlcmd = []
