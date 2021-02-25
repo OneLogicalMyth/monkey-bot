@@ -53,19 +53,19 @@ class plex(object):
                     "short": False,
                     "title": show["section_name"],
                     "value": "*Type:* " + show["section_type"] + "\n*Show Count:* " + show["count"] + "\n*Episode Count:* " + show["child_count"]
-                    })
+                })
             elif show["section_type"] == "photo":
                 fields.append({
                     "short": False,
                     "title": show["section_name"],
                     "value": "*Type:* " + show["section_type"] + "\n*Album Count:* " + show["count"] + "\n*Photo Count:* " + show["parent_count"]
-                    })
+                })
             else:
                 fields.append({
                     "short": False,
                     "title": show["section_name"],
                     "value": "*Type:* " + show["section_type"] + "\n*Item Count:* " + show["count"]
-                    })
+                })
             showlist.append({"fallback": "blah", "fields": fields})
         # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
@@ -76,11 +76,11 @@ class plex(object):
         movies, tvshows = plex.Popular()
         showlist = []
         fields = []
-        for movie in movies:       
+        for movie in movies:
             fields.append({"short": False, "title": movie["title"], "value": "Users Viewed: " + movie["users_watched"]})
         showlist.append({"fallback": "blah", "pretext": "Top Movies Viewed on Plex (Last 30 days)", "fields": fields})
         fields = []
-        for show in tvshows:   
+        for show in tvshows:
             fields.append({"short": False, "title": show["title"], "value": "Users Viewed: " + show["users_watched"]})
         showlist.append({"fallback": "blah", "pretext": "Top TV Shows Viewed on Plex (Last 30 days)", "fields": fields})
         # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]

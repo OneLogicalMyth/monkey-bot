@@ -4,7 +4,7 @@ import urllib
 
 class minecraft(object):
 
-    def getMinecraftData(self,server):
+    def getMinecraftData(self, server):
         url = "https://api.mcsrvstat.us/2/" + server
         response = urllib.urlopen(url)
         data = json.loads(response.read())
@@ -23,7 +23,7 @@ class minecraft(object):
 
         return [{"fallback": "Minecraft Update", "fields": outputs}]
 
-    def lookup(self,command,servers):
+    def lookup(self, command, servers):
         message = 'Sorry I do not understand what your trying to search.'
         attachment = False
 
@@ -34,4 +34,3 @@ class minecraft(object):
                 attachment = True
 
         return message, attachment
-

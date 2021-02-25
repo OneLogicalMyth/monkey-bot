@@ -71,5 +71,5 @@ class fitbitapi(object):
         results = r.json()
         return results
 
-    def getKey(self,item):
+    def getKey(self, item):
         return item[1]

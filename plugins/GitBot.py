@@ -56,14 +56,14 @@ class GitAPI(object):
 
     def update_file(self, existinglinks, link, sha):
         newlinks = existinglinks + link + "\n"
-        update_payload = { 
-                        "message": "New Link added",
-                        "committer" : {
-                            "name" : "Monkey Bot",
-                            "email" : "monkey@pentestmonkeys.tech"
-                        }, 
-                        "content" : base64.b64encode(newlinks),
-                        "sha" : sha
+        update_payload = {
+                            "message": "New Link added",
+                            "committer" : {
+                                "name" : "Monkey Bot",
+                                "email" : "monkey@pentestmonkeys.tech"
+                            },
+                            "content" : base64.b64encode(newlinks),
+                            "sha" : sha
                         }
         response = self.session.put(self.toolRepoURL, data=json.dumps(update_payload))
         if response.status_code == 200:

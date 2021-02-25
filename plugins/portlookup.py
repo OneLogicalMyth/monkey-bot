@@ -1,4 +1,6 @@
-import csv, os, json
+import csv
+import json
+import os
 
 
 class portlookup(object):

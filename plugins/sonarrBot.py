@@ -50,11 +50,11 @@ class sonarr(object):
         for show in tvshows:
             fields = []
             fields.append({
-                            "short": False,
-                            "title": show["name"],
-                            "value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])
-                            }
-                        )
+                "short": False,
+                "title": show["name"],
+                "value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])
+                }
+            )
             showlist.append({"fallback": "blah", "fields": fields})
         # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
@@ -75,7 +75,7 @@ class sonarr(object):
                 }
             )
             showlist.append({"fallback": "blah", "fields": fields})
-        #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
+        # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
         return message, True
 
@@ -92,13 +92,13 @@ class sonarr(object):
         showlist = []
         for show in tvtoday:
             fields = []
-            fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
+            fields.append({"short": False, "title": show["showname"], "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
             showlist.append({"fallback": "Todays Shows", "fields": fields})
         for show in tvlatest:
             fields = []
-            fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
+            fields.append({"short": False, "title": show["showname"], "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
             showlist.append({"fallback": "Next 7 days shows", "fields": fields})
-        #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
+        # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
         return message, True
 
@@ -115,7 +115,7 @@ class sonarrAPI:
         json_data = json.loads(request.text)
         if len(json_data) < 1:
             return "Empty"
-        else :
+        else:
             shows = []
             for show in json_data:
                 ishow = {}
@@ -157,7 +157,7 @@ class sonarrAPI:
                     ishow["first_aired"] = show["firstAired"]
                 else:
                     ishow["first_aired"] = "Unknown"
-                if show["seasonFolder"] == True:
+                if show["seasonFolder"] is True:
                     ishow["in_show_list"] = "Yes"
                 else:
                     ishow["in_show_list"] = "No"
@@ -170,7 +170,6 @@ class sonarrAPI:
                 shows.append(ishow)
             return shows
 
-
     def downloadTvShow(self, id):
         url = self.rooturl + '/api/series/lookup?apikey=' + self.apikey + '&term=tvdbid:' + id
         request = requests.get(url)
@@ -179,7 +178,7 @@ class sonarrAPI:
             return "Failed to add Tv Show, is the ID valid?"
         else:
             postdata = {
-                "title" : json_data[0]["title"],
+                "title": json_data[0]["title"],
                 "tvdbId": json_data[0]["tvdbId"],
                 "ProfileId": "6",
                 "monitored": "true",
@@ -199,10 +198,3 @@ class sonarrAPI:
             return "Tv Show already in plex library"
         else:
             return "Tv Show added to library, any future episodes will be downloaded. For past episodes contact Steve"
-
-        
-
-
-
-
-

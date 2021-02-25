@@ -10,7 +10,7 @@ class radarr(object):
         self.apiKey = apikey
         self.users = whitelistedusers
 
-    def begin(self,command,user):
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None
@@ -24,13 +24,13 @@ class radarr(object):
         elif 'movie download' in command:
             return self.doDownload(command.replace("movie download", ""))
         elif 'movies download' in command:
-                        return self.doDownload(command.replace("movies download", ""))
+            return self.doDownload(command.replace("movies download", ""))
         elif 'movies wanted' in command:
             return self.doWanted(command.replace("movies wanted", ""))
         elif command[-1] == '?':
             return "No."
         else:
-            return "Invalid Command"	
+            return "Invalid Command"
 
     def doSearch(self, searchstr):
         couch = radarrAPI(self.couchURL, self.apiKey)
@@ -41,7 +41,7 @@ class radarr(object):
             return "No results found for the specified search"
         message = "I found the following movies:\n"
         for movie in searchList:
-            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
+            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  +")" + "> Status: " + movie["status"] + "   :id:" + movie["imdb"] + "\n"
 
         return message
 
@@ -52,10 +52,10 @@ class radarr(object):
         movieDownload = couch.downloadMovie(id)
         return movieDownload
 
-    def doWanted(self,id):
+    def doWanted(self, id):
         couch = radarrAPI(self.couchURL, self.apiKey)
         movieWanted = couch.getWanted()
-        if movieWanted == False:
+        if movieWanted is False:
             return "Error occurred"
         message = "*Current Movies in the watch list:*\n"
         for movie in movieWanted:

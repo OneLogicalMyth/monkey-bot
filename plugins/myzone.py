@@ -7,7 +7,6 @@ from re import findall
 from argparse import ArgumentParser
 
 
-
 class myzone(object):
 
     def __init__(self, username, password, nicknames):
@@ -31,7 +30,7 @@ class myzone(object):
     def leaderboard(self, nicknames=None):
         # nicknames should be in the format of ["nick1","nick2","nick3"]
         response = requests.get('https://www.myzonemoves.com/sessioncalls/leaderboard/', cookies=self.phpsession)
-        leaderboard = response.json()                                                                                                                                                                                                                
+        leaderboard = response.json()                                                                                                                                                                                                       
         if 'error' in leaderboard:
             return False
         else:

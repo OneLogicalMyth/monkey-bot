@@ -51,7 +51,7 @@ class sickChill(object):
             fields = []
             fields.append({"short": False, "title": show["name"], "value": "*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
             showlist.append({"fallback": "blah", "fields": fields})
-        #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
+        # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
         return message, True
 
@@ -103,7 +103,7 @@ class sickChillAPI:
         url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=today'
         request = requests.get(url)
         json_data = json.loads(request.text)
-        if json_data["result"] !="success":
+        if json_data["result"] != "success":
             return False
         elif json_data["result"] == "success":
             if len(json_data["data"]["today"]) == 0:
@@ -122,7 +122,7 @@ class sickChillAPI:
         url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=soon'
         request = requests.get(url)
         json_data = json.loads(request.text)
-        if json_data["result"] !="success":
+        if json_data["result"] != "success":
             return False
         elif json_data["result"] == "success":
             if len(json_data["data"]["soon"]) == 0:
@@ -141,7 +141,7 @@ class sickChillAPI:
         url = self.rooturl + '/api/' + self.apikey + '/?cmd=sb.searchindexers&only_new=0&name=' + search
         request = requests.get(url)
         json_data = json.loads(request.text)
-        if json_data["result"] !="success":
+        if json_data["result"] != "success":
             return False
         elif json_data["result"] == "success":
             if len(json_data["data"]["results"]) == 0:
@@ -150,7 +150,7 @@ class sickChillAPI:
             for show in json_data["data"]["results"]:
                 ishow = {}
                 ishow["first_aired"] = show["first_aired"]
-                if show["in_show_list"] == True:
+                if show["in_show_list"] is True:
                     ishow["in_show_list"] = "Yes"
                 else:
                     ishow["in_show_list"] = "No"
@@ -159,12 +159,11 @@ class sickChillAPI:
                 shows.append(ishow)
             return shows
 
-
     def downloadTvShow(self, id):
         url = self.rooturl + '/api/' + self.apikey + "?cmd=show.addnew&indexerid=268592&status=ignored&tvdbid=" + id
         request = requests.get(url)
         json_data = json.loads(request.text)
-        if json_data["result"] !="success":
+        if json_data["result"] != "success":
             return json_data["message"]
         elif json_data["result"] == "success":
             return json_data["message"]
