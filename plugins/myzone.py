@@ -1,18 +1,23 @@
+import datetime
+import json
 import requests
+import urllib3
+
 from re import findall
 from argparse import ArgumentParser
-import datetime, json, urllib3
+
+
 
 class myzone(object):
 
-    def __init__(self,username,password,nicknames):
+    def __init__(self, username, password, nicknames):
         self.username = username
         self.password = password
         self.nicknames = nicknames
         self.login()
 
     def login(self):
-        logindata = {'e':self.username,'p':self.password,'r':'0'}
+        logindata = {'e':self.username, 'p': self.password, 'r': '0'}
         response = requests.post('https://www.myzonemoves.com/calls/login/', data=logindata)
         if response.text == 0:
             return False
@@ -23,7 +28,7 @@ class myzone(object):
     def logout(self):
         response = requests.get('https://www.myzonemoves.com/sessioncalls/logout/', cookies=self.phpsession)
 
-    def leaderboard(self,nicknames=None):
+    def leaderboard(self, nicknames=None):
         # nicknames should be in the format of ["nick1","nick2","nick3"]
         response = requests.get('https://www.myzonemoves.com/sessioncalls/leaderboard/', cookies=self.phpsession)
         leaderboard = response.json()                                                                                                                                                                                                                

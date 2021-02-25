@@ -1,35 +1,35 @@
 class help(object):
 
-    def get_help(self,command):
+    def get_help(self, command):
 
         attachments = []
 
         if command.startswith('help fitness'):
-                attachments.append(self.fitness())
+            attachments.append(self.fitness())
 
         if command.startswith('help rtfm'):
-                attachments.append(self.rtfm())
+            attachments.append(self.rtfm())
 
         if command.startswith('help minecraft'):
-                attachments.append(self.minecraft())
+            attachments.append(self.minecraft())
 
         if command.startswith('help port'):
-                attachments.append(self.port())
+            attachments.append(self.port())
 
         if command.startswith('help all'):
-                attachments.append(self.fitness())
+            attachments.append(self.fitness())
 
         if command.startswith('help movies'):
-                attachments.append(self.movies())
+            attachments.append(self.movies())
 
         if command.startswith('help tv'):
-                attachments.append(self.tv())
+            attachments.append(self.tv())
 
         if command.startswith('help plex'):
-                attachments.append(self.plex())
+            attachments.append(self.plex())
 
         if command == 'help' or len(attachments) == 0:
-                attachments.append({
+            attachments.append({
                 "fallback": "help all",
                 "title": "Help Commands",
                 "text": "The following help topics are available. Just do `help topic`.",
@@ -40,7 +40,7 @@ class help(object):
                         "short": True
                         }
                 ]
-                })
+            })
 
         return attachments
 

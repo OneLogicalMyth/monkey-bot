@@ -10,8 +10,8 @@ class GitBot(object):
         self.toolRepoURL = toolRepoURL
         self.username = username
         self.password = password
-    
-    def begin(self,command,user):
+
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None
@@ -25,10 +25,7 @@ class GitBot(object):
         elif command[-1] == '?':
             return "No."
         else:
-            return "Not a valid Link"	
-
-
-
+            return "Not a valid Link"
 
 
 class GitAPI(object):

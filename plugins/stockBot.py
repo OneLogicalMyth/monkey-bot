@@ -2,13 +2,14 @@ import requests
 import json
 import urllib
 
+
 class stocks(object):
-    
+
     def __init__(self, stockURL, apikey):
         self.stockURL = stockURL
         self.apiKey = apikey
-    
-    def begin(self,command,user):
+
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None
@@ -26,20 +27,18 @@ class stocks(object):
         else:
             return "Invalid Command", False
 
-
     def getNews(self, searchstr):
         stock = stockAPI(self.stockURL, self.apiKey, searchstr)
         news = stock.News()
         newslist = []
         for newsitem in news:
             fields = []
-            fields.append({"short": False, "title": "Headline" , "value": newsitem["headline"]})
-            fields.append({"short": False, "title": "Summary" , "value": newsitem["summary"]})
-            fields.append({"short": False, "title": "URL" , "value": newsitem["url"]})
+            fields.append({"short": False, "title": "Headline", "value": newsitem["headline"]})
+            fields.append({"short": False, "title": "Summary", "value": newsitem["summary"]})
+            fields.append({"short": False, "title": "URL", "value": newsitem["url"]})
             newslist.append({"fallback": "Stock News", "fields": fields})
         message = newslist
         return message, True
-
 
 
 class stockAPI:
@@ -67,5 +66,5 @@ class stockAPI:
             item["url"] = newsitem["url"]
             item["summary"] = newsitem["summary"]
             news.append(item)
-            count+= 1
+            count += 1
         return news

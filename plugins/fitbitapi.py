@@ -14,7 +14,7 @@ class fitbitapi(object):
         self.api_key = api_key
         self.api_url = api_url
 
-    def begin(self,command):
+    def begin(self, command):
 
         # make the command lower for all functions
         command = command.lower()
@@ -28,7 +28,7 @@ class fitbitapi(object):
         # print self.client_id
         # , self.client_secret = ReadCredentials()
         self.ACCESS_TOKEN, self.REFRESH_TOKEN = ReadTokens()
-        auth2_client = fitbit.Fitbit(self.client_id,self.client_secret, oauth2=True, access_token=self.ACCESS_TOKEN, refresh_token=self.REFRESH_TOKEN,refresh_cb=SaveTokens)
+        auth2_client = fitbit.Fitbit(self.client_id, self.client_secret, oauth2=True, access_token=self.ACCESS_TOKEN, refresh_token=self.REFRESH_TOKEN, refresh_cb=SaveTokens)
 
         yesterday = str((datetime.datetime.now() - datetime.timedelta(days=1)).strftime("%Y%m%d"))
         friends = auth2_client.get_friends_leaderboardnew("7d")
@@ -38,7 +38,6 @@ class fitbitapi(object):
         # googlefitapi = g_fit.googlefit().get_stats()
         results = []
 
-        
         # new Fitbit API Code
         for friend in friends["included"]:
             for data in friends["data"]:
@@ -59,7 +58,7 @@ class fitbitapi(object):
             combined = [key + " (iWatch)",round(float(value))]
             results.append(combined)
 
-        results = sorted(results,reverse=True, key=self.getKey)
+        results = sorted(results, reverse=True, key=self.getKey)
 
         for result in results:
             count += 1
@@ -70,7 +69,7 @@ class fitbitapi(object):
     def getApple(self):
         # Function to return the Apple stats from the custom API
         URL = "https://%s?func=get" % self.api_url
-        r = requests.get(url = URL)
+        r = requests.get(url=URL)
         results = r.json()
         return results
 

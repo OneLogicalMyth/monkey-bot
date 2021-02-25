@@ -3,13 +3,13 @@ import json
 import urllib
 
 class sickChill(object):
-    
-    def __init__(self, couchURL, apikey,whitelistedusers):
+
+    def __init__(self, couchURL, apikey, whitelistedusers):
         self.sickURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
-    
-    def begin(self,command,user):
+
+    def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
         response = None
@@ -27,7 +27,7 @@ class sickChill(object):
         elif command[-1] == '?':
             return "No.", False
         else:
-            return "Invalid Command", False	
+            return "Invalid Command", False
 
     def getDownload(self, searchstr):
         sick = sickChillAPI(self.sickURL, self.apiKey)
@@ -40,15 +40,15 @@ class sickChill(object):
             return "Success: " + download + "\n *WARNING: This will only add future episodes, contact steve to add past episodes*", False
         return download, False
 
-    def getSearch(self,seachstr):
+    def getSearch(self, seachstr):
         sick = sickChillAPI(self.sickURL, self.apiKey)
         tvshows = sick.searchTvShows(seachstr)
         if tvshows == "Empty":
             return "No tvshows found", False
-        showlist =[]
+        showlist = []
         for show in tvshows:
             fields = []
-            fields.append({"short": False, "title": show["name"] , "value": "*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
+            fields.append({"short": False, "title": show["name"], "value": "*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
             showlist.append({"fallback": "blah", "fields": fields})
         #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
@@ -62,9 +62,9 @@ class sickChill(object):
         showlist = []
         for show in tvtoday:
             fields = []
-            fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
+            fields.append({"short": False, "title": show["showname"], "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
             showlist.append({"fallback": "blah", "fields": fields})
-        #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
+        # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
         return message, True
 
@@ -81,96 +81,92 @@ class sickChill(object):
         showlist = []
         for show in tvtoday:
             fields = []
-            fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
+            fields.append({"short": False, "title": show["showname"], "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
             showlist.append({"fallback": "Todays Shows", "fields": fields})
         for show in tvlatest:
             fields = []
-            fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
+            fields.append({"short": False, "title": show["showname"], "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
             showlist.append({"fallback": "Next 7 days shows", "fields": fields})
-        #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
+        # message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
         return message, True
 
 
-
-
 class sickChillAPI:
 
+    def __init__(self, url, apikey):
+        self.rooturl = url
+        self.apikey = apikey
 
-        def __init__(self, url, apikey):
-            self.rooturl = url
-            self.apikey = apikey
+    def Today(self):
+        url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=today'
+        request = requests.get(url)
+        json_data = json.loads(request.text)
+        if json_data["result"] !="success":
+            return False
+        elif json_data["result"] == "success":
+            if len(json_data["data"]["today"]) == 0:
+                return "Empty"
+            shows = []
+            for show in json_data["data"]["today"]:
+                ishow = {}
+                ishow["showname"] = show["show_name"]
+                ishow["showepisode"] = show["ep_name"]
+                ishow["quality"] = show["quality"]
+                ishow["airs"] = show["airs"]
+                shows.append(ishow)
+            return shows
 
-        def Today(self):
-            url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=today'
-            request = requests.get(url)
-            json_data = json.loads(request.text)
-            if json_data["result"] !="success":
-                return False
-            elif json_data["result"] == "success":
-                if len(json_data["data"]["today"]) == 0:
-                    return "Empty"
-                shows = []
-                for show in json_data["data"]["today"]:
-                    ishow = {}
-                    ishow["showname"] = show["show_name"]
-                    ishow["showepisode"] = show["ep_name"]
-                    ishow["quality"] = show["quality"]
-                    ishow["airs"] = show["airs"]
-                    shows.append(ishow)
-                return shows
+    def Latest(self):
+        url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=soon'
+        request = requests.get(url)
+        json_data = json.loads(request.text)
+        if json_data["result"] !="success":
+            return False
+        elif json_data["result"] == "success":
+            if len(json_data["data"]["soon"]) == 0:
+                return "Empty"
+            shows = []
+            for show in json_data["data"]["soon"]:
+                ishow = {}
+                ishow["showname"] = show["show_name"]
+                ishow["showepisode"] = show["ep_name"]
+                ishow["quality"] = show["quality"]
+                ishow["airs"] = show["airs"]
+                shows.append(ishow)
+            return shows
 
-        def Latest(self):
-            url = self.rooturl + '/api/' + self.apikey + '/?cmd=future&type=soon'
-            request = requests.get(url)
-            json_data = json.loads(request.text)
-            if json_data["result"] !="success":
-                return False
-            elif json_data["result"] == "success":
-                if len(json_data["data"]["soon"]) == 0:
-                    return "Empty"
-                shows = []
-                for show in json_data["data"]["soon"]:
-                    ishow = {}
-                    ishow["showname"] = show["show_name"]
-                    ishow["showepisode"] = show["ep_name"]
-                    ishow["quality"] = show["quality"]
-                    ishow["airs"] = show["airs"]
-                    shows.append(ishow)
-                return shows
-
-
-        def searchTvShows(self, search):
-            url = self.rooturl + '/api/' + self.apikey + '/?cmd=sb.searchindexers&only_new=0&name=' + search
-            request = requests.get(url)
-            json_data = json.loads(request.text)
-            if json_data["result"] !="success":
-                return False
-            elif json_data["result"] == "success":
-                if len(json_data["data"]["results"]) == 0:
-                    return "Empty"
-                shows = []
-                for show in json_data["data"]["results"]:
-                    ishow = {}
-                    ishow["first_aired"] = show["first_aired"]
-                    if show["in_show_list"] == True:
-                        ishow["in_show_list"] = "Yes"
-                    else:
-                        ishow["in_show_list"] = "No"
-                    ishow["name"] = show["name"]
-                    ishow["id"] = show["tvdbid"]
-                    shows.append(ishow)
-                return shows
+    def searchTvShows(self, search):
+        url = self.rooturl + '/api/' + self.apikey + '/?cmd=sb.searchindexers&only_new=0&name=' + search
+        request = requests.get(url)
+        json_data = json.loads(request.text)
+        if json_data["result"] !="success":
+            return False
+        elif json_data["result"] == "success":
+            if len(json_data["data"]["results"]) == 0:
+                return "Empty"
+            shows = []
+            for show in json_data["data"]["results"]:
+                ishow = {}
+                ishow["first_aired"] = show["first_aired"]
+                if show["in_show_list"] == True:
+                    ishow["in_show_list"] = "Yes"
+                else:
+                    ishow["in_show_list"] = "No"
+                ishow["name"] = show["name"]
+                ishow["id"] = show["tvdbid"]
+                shows.append(ishow)
+            return shows
 
 
-        def downloadTvShow(self, id):
-            url = self.rooturl + '/api/' + self.apikey + "?cmd=show.addnew&indexerid=268592&status=ignored&tvdbid=" + id
-            request = requests.get(url)
-            json_data = json.loads(request.text)
-            if json_data["result"] !="success":
-                return json_data["message"]
-            elif json_data["result"] == "success":
-                return json_data["message"]
+    def downloadTvShow(self, id):
+        url = self.rooturl + '/api/' + self.apikey + "?cmd=show.addnew&indexerid=268592&status=ignored&tvdbid=" + id
+        request = requests.get(url)
+        json_data = json.loads(request.text)
+        if json_data["result"] !="success":
+            return json_data["message"]
+        elif json_data["result"] == "success":
+            return json_data["message"]
         
 
 

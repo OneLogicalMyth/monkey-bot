@@ -41,7 +41,7 @@ class couchPotato(object):
             return "No results found for the specified search"
         message = "I found the following movies:\n"
         for movie in searchList:
-            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"]  + ")" + "> Status: " + movie["status"]+ "   :id:" + movie["imdb"] + "\n"
+            message += "<http://www.imdb.com/title/" + movie["imdb"] + "|" + movie["title"] + "(" + movie["year"] + ")" + "> Status: " + movie["status"] + "   :id:" + movie["imdb"] + "\n"
 
         return message
 
@@ -84,15 +84,15 @@ class couchPotatoAPI:
             # print "Movie Name: " + movie["titles"][0]
             imovie["title"] = movie["titles"][0]
             if movie["in_library"]:
-                #print "Already on Plex"
+                # print "Already on Plex"
                 imovie["status"] = "On Plex already"
             elif movie["in_wanted"]:
-                #print movie["in_wanted"]["status"]
+                # print movie["in_wanted"]["status"]
                 imovie["status"] = "On Wanted List"
-            else :
+            else:
                 imovie["status"] = "Can be Added"
             if "imdb" in movie:
-                #print "ID: " + str(movie["imdb"])
+                # print "ID: " + str(movie["imdb"])
                 imovie["imdb"] = movie["imdb"]
             else:
                 imovie["imdb"] = "unknown"
@@ -107,9 +107,9 @@ class couchPotatoAPI:
         url = self.rooturl + '/api/' + self.apikey + '/media.list?type=movie&status=active'
         request = requests.get(url)
         json_data = json.loads(request.text)
-        if json_data["success"] == False:
+        if json_data["success"] is False:
             return False
-        elif json_data["success"] == True:
+        elif json_data["success"] is True:
             movies = []
             for movie in json_data["movies"]:
                 imovie = {}
@@ -122,7 +122,7 @@ class couchPotatoAPI:
         url = self.rooturl + '/api/' + self.apikey + '/movie.add/?identifier=' + urllib.quote_plus(id)
         request = requests.get(url)
         json_data = json.loads(request.text)
-        if json_data["success"] == False:
+        if json_data["success"] is False:
             return "Failed to download movie, is the ID valid?"
-        elif json_data["success"] == True:
+        elif json_data["success"] is True:
             return "Movie added to wanted list, it will be downloaded as soon as a release becomes avaliable"

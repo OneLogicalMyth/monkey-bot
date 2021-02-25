@@ -5,10 +5,11 @@ import urllib
 
 class radarr(object):
 
-    def __init__(self, couchURL, apikey,whitelistedusers):
+    def __init__(self, couchURL, apikey, whitelistedusers):
         self.couchURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
+
     def begin(self,command,user):
         # make the command lower for all functions
         command = command.lower()
@@ -31,8 +32,7 @@ class radarr(object):
         else:
             return "Invalid Command"	
 
-
-    def doSearch(self,searchstr):
+    def doSearch(self, searchstr):
         couch = radarrAPI(self.couchURL, self.apiKey)
         if searchstr == "":
             return "Invalid search string please specify a search term such as 'movies search iron man'"
@@ -45,7 +45,7 @@ class radarr(object):
 
         return message
 
-    def doDownload(self,id):
+    def doDownload(self, id):
         couch = radarrAPI(self.couchURL, self.apiKey)
         if id == "":
             return "Invalid ID"
@@ -64,7 +64,6 @@ class radarr(object):
 
 class radarrAPI:
     
-
     def __init__(self, url, apikey):
         self.rooturl = url
         self.apikey = apikey
@@ -72,7 +71,7 @@ class radarrAPI:
     def printapi(self):
          return self.apikey
 
-    def searchMovies(self,name):
+    def searchMovies(self, name):
         url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=' + urllib.quote_plus(name)
         request = requests.get(url)
         json_data = json.loads(request.text)
@@ -101,7 +100,6 @@ class radarrAPI:
                 movies.append(imovie)
         return movies
 
-
     def getWanted(self):
         url = self.rooturl + '/api/v3/calendar?apikey=' + self.apikey + "&unmonitored=false&start=2021-02-22&end=2030-01-01"
         request = requests.get(url)
@@ -117,9 +115,7 @@ class radarrAPI:
                 movies.append(imovie)
             return movies
 
-
-
-    def downloadMovie(self,id):
+    def downloadMovie(self, id):
         #url = self.rooturl + '/api/v3/movie/'+ urllib.quote_plus(id) + "?apikey=" + self.apikey
         url = self.rooturl + '/api/v3/movie/lookup?apikey=' + self.apikey + '&term=imdb:' + id
         request = requests.get(url)

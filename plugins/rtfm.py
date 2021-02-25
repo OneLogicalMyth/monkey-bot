@@ -15,19 +15,19 @@ class rtfm(object):
             if ' ' not in command:
                 return "You need to include a search term such as RDP", attachment
             search = "{}".format(command.split(' ')[1])
-            if search: 
+            if search:
                 sqlcmd.append(" AND (c.cmd LIKE ? OR c.cmnt like ? or tc.tag LIKE ? OR c.author LIKE ?)")
-                sqltpl.append("%"+search+"%")
-                sqltpl.append("%"+search+"%")
-                sqltpl.append("%"+search+"%")
-                sqltpl.append("%"+search+"%")
+                sqltpl.append("%" + search + "%")
+                sqltpl.append("%" + search + "%")
+                sqltpl.append("%" + search + "%")
+                sqltpl.append("%" + search + "%")
                 message = self.Search(conn, sqlcmd, sqltpl, sqllst)
                 attachment = True
             else:
                 message = "You need to include a search term such as rtfm rdp"
         return message, attachment
 
-    def Search(self,conn, sqlcmd, sqltpl, sqllst):
+    def Search(self, conn, sqlcmd, sqltpl, sqllst):
         cur = conn.cursor()
         sql = "SELECT c.cmdid, c.cmd, c.cmnt, c.date, c.author, group_concat(DISTINCT tc.tag), group_concat(DISTINCT ref)"
         sql += " FROM tblcommand c JOIN tbltagmap tm ON tm.cmdid = c.cmdid JOIN tbltagcontent tc ON "

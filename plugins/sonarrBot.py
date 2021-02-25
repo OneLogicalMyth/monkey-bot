@@ -4,12 +4,12 @@ import urllib
 
 
 class sonarr(object):
-    
+
     def __init__(self, couchURL, apikey, whitelistedusers):
         self.sickURL = couchURL
         self.apiKey = apikey
         self.users = whitelistedusers
-    
+
     def begin(self, command, user):
         # make the command lower for all functions
         command = command.lower()
@@ -28,7 +28,7 @@ class sonarr(object):
         elif command[-1] == '?':
             return "No.", False
         else:
-            return "Invalid Command", False	
+            return "Invalid Command", False
 
     def getDownload(self, searchstr):
         sick = sonarrAPI(self.sickURL, self.apiKey)
@@ -41,15 +41,20 @@ class sonarr(object):
             return "Success: " + download + "\n *WARNING: This will only add future episodes, contact steve to add past episodes*", False
         return download, False
 
-    def getSearch(self,seachstr):
+    def getSearch(self, seachstr):
         sick = sonarrAPI(self.sickURL, self.apiKey)
         tvshows = sick.searchTvShows(seachstr)
         if tvshows == "Empty":
             return "No tvshows found", False
-        showlist =[]
+        showlist = []
         for show in tvshows:
             fields = []
-            fields.append({"short": False, "title": show["name"] ,"value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])})
+            fields.append({
+                "short": False,
+                "title": show["name"],
+                "value": "*Overview:* " + show["overview"] + "\n*First Aired:* " + show["first_aired"] + "\n*Allready added:* " + show["in_show_list"] + "\n*ShowID:* " + str(show["id"])
+                }
+            )
             showlist.append({"fallback": "blah", "fields": fields})
         #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
@@ -63,7 +68,12 @@ class sonarr(object):
         showlist = []
         for show in tvtoday:
             fields = []
-            fields.append({"short": False, "title": show["showname"] , "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]})
+            fields.append({
+                "short": False,
+                "title": show["showname"],
+                "value": "*Episode:* " + show["showepisode"] + "\n*Airs:* " + show["airs"] + "\n*Quality:* " + show["quality"]
+                }
+            )
             showlist.append({"fallback": "blah", "fields": fields})
         #message = [{"fallback": "blah", "pretext": "The following shows will download today:", "fields": showlist}]
         message = showlist
